@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enlighten.Study.Core", "Enl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enlighten.Gpt.Client", "Enlighten.Gpt.Client\Enlighten.Gpt.Client.csproj", "{4A914BB5-9B14-4D1E-A329-06F43FD383B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enlighten.Data", "Enlighten.Data\Enlighten.Data.csproj", "{189AA317-B1FE-4C19-8062-A34933A3DB8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{4A914BB5-9B14-4D1E-A329-06F43FD383B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A914BB5-9B14-4D1E-A329-06F43FD383B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A914BB5-9B14-4D1E-A329-06F43FD383B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{189AA317-B1FE-4C19-8062-A34933A3DB8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{189AA317-B1FE-4C19-8062-A34933A3DB8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{189AA317-B1FE-4C19-8062-A34933A3DB8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{189AA317-B1FE-4C19-8062-A34933A3DB8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Enlighten.Data\Enlighten.Data.csproj" />
+    <ProjectReference Include="..\Enlighten.Gpt.Client\Enlighten.Gpt.Client.csproj" />
+  </ItemGroup>
+
 </Project>

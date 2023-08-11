@@ -1,3 +1,6 @@
+using Enlighten.Data.Configuration;
+using Enlighten.Gpt.Client.Configuration;
+using Enlighten.Study.Core.Configuration;
 using Enlighten.Study.Web.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -7,6 +10,28 @@ using MudBlazor.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
+
+
+//settings
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddUserSecrets<Program>()
+    .Build();
+
+
+var coreSettings = new CoreSettingsModel();
+configuration.GetSection("CoreSettings").Bind(coreSettings);
+builder.Services.AddSingleton(coreSettings);
+
+
+var gptClientSettings = new GptClientSettingsModel();
+configuration.GetSection("GptClientSettings").Bind(gptClientSettings);
+builder.Services.AddSingleton(gptClientSettings);
+
+
+var dataSettingsModel = new DataSettingsModel();
+configuration.GetSection("DataSettings").Bind(dataSettingsModel);
+builder.Services.AddSingleton(dataSettingsModel);
 
 // Add services to the container.
 builder.Services.AddRazorPages();

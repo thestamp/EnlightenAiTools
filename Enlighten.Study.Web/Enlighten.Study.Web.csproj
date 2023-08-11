@@ -10,4 +10,9 @@
     <PackageReference Include="MudBlazor" Version="6.0.13" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Enlighten.Gpt.Client\Enlighten.Gpt.Client.csproj" />
+    <ProjectReference Include="..\Enlighten.Study.Core\Enlighten.Study.Core.csproj" />
+  </ItemGroup>
+
 </Project>
