@@ -1,0 +1,118 @@
+﻿@page "/quiz"
+
+@using Enlighten.Data.Models
+@inherits StudyQuizBase
+
+<MudText Typo="Typo.h3" GutterBottom="true">Quiz</MudText>
+<MudText Class="mb-8">Test your skills for an upcoming exam! (As part of a balanced study!)</MudText>
+
+<MudContainer>
+    <MudPaper Elevation="2" Rounded="true" Class="p-4 my-4">
+        
+        <MudSelect T="Textbook" Label="Select Textbook" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedTextbook" >
+            @foreach (var item in Textbooks)
+            {
+                <MudSelectItem Value="@item">@item.Name</MudSelectItem>
+            }
+        </MudSelect>
+        
+
+        <MudSelect T="TextbookChapter" Label="Select Chapter" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedChapter" Disabled="IsRandomChapter">
+            @if (SelectedTextbook != null)
+            {
+                @foreach (var item in SelectedTextbook.Chapters)
+                {
+                    <MudSelectItem Value="@item">@item.ChapterName</MudSelectItem>
+                }
+            }
+           
+        </MudSelect>
+
+        <MudCheckBox T="bool" Label="Random Chapter" @bind-Checked="@IsRandomChapter"></MudCheckBox>
+
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GenerateQuestion" Class="mt-4" Disabled="SelectedTextbook == null || (SelectedChapter == null && !IsRandomChapter)">
+            @if (_processing)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                <MudText Class="ms-2">Processing</MudText>
+            }
+            else
+            {
+                <MudText>Generate Question</MudText>
+            }
+
+        </MudButton>
+
+
+    </MudPaper>
+    
+    <br /><br />
+        
+    @if (!string.IsNullOrEmpty(botQuestion))
+        {
+
+            <MudCard>
+                <MudCardContent>
+                    <MudText>@SelectedChapter?.ChapterName Question!</MudText>
+                    <MudMarkdown Value="@botQuestion"/>
+
+                <MudTextField @ref="txtAnswer" @bind-Value="@userAnswer" Label="Your Answer" Multiline="true" Rows="2" Variant="Variant.Outlined" Class="mt-4" Disabled="_processing" />
+
+                </MudCardContent>
+                <MudCardActions>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="GenerateResponseAnswer" Class="mt-4" >
+                        @if (_processing)
+                        {
+                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                            <MudText Class="ms-2">Processing</MudText>
+                        }
+                        else
+                        {
+                            <MudText>Submit Answer</MudText>
+                        }
+
+                    </MudButton>
+                </MudCardActions>
+            </MudCard>
+
+
+            
+            
+            <br><br />
+        
+            @if (hasAnswer)
+            {
+                if (isCorrect)
+                {
+                    <MudAlert Severity="Severity.Success">@botAnswerResponse</MudAlert>
+
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GenerateQuestion" Class="mt-4" Disabled="SelectedChapter == null && !IsRandomChapter">
+                        @if (_processing)
+                        {
+                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                            <MudText Class="ms-2">Processing</MudText>
+                        }
+                        else
+                        {
+                            <MudText>Next Question</MudText>
+                        }
+
+                    </MudButton>
+                }
+                else
+                {
+                    if (isSomewhatCorrect)
+                    {
+                        <MudAlert Severity="Severity.Warning">@botAnswerResponse</MudAlert>
+                    }
+                    else
+                    {
+                        <MudAlert Severity="Severity.Error">@botAnswerResponse</MudAlert>
+                    }
+                
+                }
+            }
+        }
+
+ 
+</MudContainer>

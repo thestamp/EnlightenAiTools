@@ -1,10 +1,11 @@
 using Enlighten.Data.Configuration;
+using Enlighten.Data.Infrastructure;
 using Enlighten.Gpt.Client.Configuration;
 using Enlighten.Study.Core.Configuration;
-using Enlighten.Study.Web.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,10 +34,14 @@ var dataSettingsModel = new DataSettingsModel();
 configuration.GetSection("DataSettings").Bind(dataSettingsModel);
 builder.Services.AddSingleton(dataSettingsModel);
 
+//ef context
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(dataSettingsModel.DataContext));
+
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+//builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddMudServices();
 
 var app = builder.Build();

@@ -1,0 +1,57 @@
+﻿@page "/Inquiry"
+@using Enlighten.Data.Models
+@inherits StudyInquireBase
+
+
+<MudText Typo="Typo.h3" GutterBottom="true">Inquire</MudText>
+<MudText Class="mb-8">Have questions about a chapter? Select a textbook, chapter, and ask a question to clarify any questions you may have!</MudText>
+<MudContainer>
+    <MudPaper Elevation="2" Rounded="true" Class="p-4 my-4">
+        
+        <MudSelect T="Textbook" Label="Select Textbook" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedTextbook" >
+            @foreach (var item in Textbooks)
+            {
+                <MudSelectItem Value="@item">@item.Name</MudSelectItem>
+            }
+        </MudSelect>
+        
+
+        <MudSelect T="TextbookChapter" Label="Select Chapter" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedChapter">
+            @if (SelectedTextbook != null)
+            {
+                @foreach (var item in SelectedTextbook.Chapters)
+                {
+                    <MudSelectItem Value="@item">@item.ChapterName</MudSelectItem>
+                }
+            }
+           
+        </MudSelect>
+
+        <MudTextField @bind-Value="@InquiryText" Label="Inquiry" Multiline="true" Rows="2" Variant="Variant.Outlined" Class="mt-4" Disabled="_processing" />
+
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Inquire" Class="mt-4" Disabled="SelectedTextbook == null || SelectedChapter == null">
+            @if (_processing)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                <MudText Class="ms-2">Processing</MudText>
+            }
+            else
+            {
+                <MudText>Inquire</MudText>
+            }
+
+        </MudButton>
+
+    </MudPaper>
+    
+    <br /><br />
+        
+    @if (!string.IsNullOrEmpty(botResponse))
+        {
+
+        <MudAlert Severity="Severity.Info"><MudMarkdown Value="@botResponse" /></MudAlert>
+          
+        }
+
+ 
+</MudContainer>
