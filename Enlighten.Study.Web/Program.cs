@@ -2,6 +2,7 @@ using Enlighten.Data.Configuration;
 using Enlighten.Data.Infrastructure;
 using Enlighten.Gpt.Client.Configuration;
 using Enlighten.Study.Core.Configuration;
+using Enlighten.Study.Core.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
@@ -11,6 +12,8 @@ using MudBlazor.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
+
+builder.Services.AddTransient<TextbookService>();//dbcontext should be injected too, since we are using it in the service
 
 
 //settings

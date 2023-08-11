@@ -4,10 +4,12 @@
 	  <TargetFramework>net6.0</TargetFramework>
 	  <Nullable>enable</Nullable>
 	  <ImplicitUsings>enable</ImplicitUsings>
+	  <UserSecretsId>33dd7026-92a6-4c5a-bb3d-7e077620a27e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MudBlazor" Version="6.0.13" />
+    <PackageReference Include="MudBlazor" Version="6.8.0" />
+    <PackageReference Include="MudBlazor.Markdown" Version="0.1.2" />
   </ItemGroup>
 
   <ItemGroup>
