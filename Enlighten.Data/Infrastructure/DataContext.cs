@@ -7,9 +7,9 @@ namespace Enlighten.Data.Infrastructure
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-            //dotnet-ef migrations [SUMMARY] --project pupilpal.data --startup-project pupilpal.web
-
-            //dotnet-ef database update  --project pupilpal.data --startup-project pupilpal.web
+            //required LocalDB - https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver16#install-localdb
+            //dotnet-ef migrations add [SUMMARY] --project Enlighten.Data --startup-project Enlighten.Study.Web
+            //dotnet-ef database update --project Enlighten.Data --startup-project Enlighten.Study.Web
         }
 
         public DbSet<Course> Schools { get; set; }

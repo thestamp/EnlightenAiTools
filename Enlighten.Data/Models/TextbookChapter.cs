@@ -1,5 +1,8 @@
-﻿namespace Enlighten.Data.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Enlighten.Data.Models
 {
+    [NotMapped]
     public class TextbookChapter
     {
         public int Id { get; set; }
