@@ -1,4 +1,6 @@
-﻿using Enlighten.Data.Models;
+﻿using Enlighten.Core.Services;
+using Enlighten.Data.Models;
+using Enlighten.Data.Models.Configuration;
 using Enlighten.Gpt.Client.Configuration;
 using Enlighten.Study.Core.Configuration;
 using Enlighten.Study.Core.Services;
@@ -15,7 +17,7 @@ namespace Enlighten.Study.Web.Pages
 
         [Inject] public TextbookService TextbookService { get; set; }
 
-
+        [Inject] public GptDefaults GptDefaults { get; set; }
 
         public MudTextField<string> txtAnswer { get; set; }
         public bool hasAnswer { get; set; }
@@ -67,7 +69,7 @@ namespace Enlighten.Study.Web.Pages
 
 
             _processing = true;
-            var svc = new StudyQuizService(CoreSettingsModel, GptClientSettingsModel);
+            var svc = new StudyQuizService(GptClientSettingsModel);
 
             //if random chapter is selected, we will select a random chapter
             if (IsRandomChapter && SelectedTextbook != null)
@@ -76,7 +78,11 @@ namespace Enlighten.Study.Web.Pages
                 SelectedChapter = SelectedTextbook.Chapters[randomIndex];
             }
 
+            var promptSvc = new GptPromptService();
+            var promptSettings = promptSvc.RenderGptPrompt(GptDefaults, SelectedTextbook, SelectedChapter);
+
             botQuestion = await svc.GenerateQuestion(
+                promptSettings,
                 "TEXTBOOK SUMMARY: " + SelectedTextbook.TextbookSummary 
                 +"CHAPTER CONTENT: " + SelectedChapter.ChapterContent);
             _processing = false;
@@ -85,8 +91,13 @@ namespace Enlighten.Study.Web.Pages
         public async Task GenerateResponseAnswer()
         {
             _processing = true;
-            var svc = new StudyQuizService(CoreSettingsModel, GptClientSettingsModel);
+
+            var promptSvc = new GptPromptService();
+            var promptSettings = promptSvc.RenderGptPrompt(GptDefaults, SelectedTextbook, SelectedChapter);
+
+            var svc = new StudyQuizService(GptClientSettingsModel);
             var response = await svc.GenerateQuestionResponseAnswer(
+                promptSettings,
                 "TEXTBOOK SUMMARY: " + SelectedTextbook.TextbookSummary
                 + "CHAPTER CONTENT: " + SelectedChapter.ChapterContent
                 , botQuestion, userAnswer);

@@ -8,6 +8,11 @@ namespace Enlighten.Data.Models.Configuration
 {
     public class GptDefaults : BaseGpt
     {
-        public int Id { get; set; }
+        public GptDefaults()
+        {
+            PromptPriority = 1;
+        }
+
+        public int Id { get; private set; }
     }
 }

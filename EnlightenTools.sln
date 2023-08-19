@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enlighten.Admin.Web", "Enli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enlighten.Admin.Core", "Enlighten.Admin.Core\Enlighten.Admin.Core.csproj", "{3DFA83E7-AE3D-4560-A53D-7B592E724FD4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enlighten.Core", "Enlighten.Core\Enlighten.Core.csproj", "{44147204-080F-40D8-9BA5-354881C5542B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{3DFA83E7-AE3D-4560-A53D-7B592E724FD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DFA83E7-AE3D-4560-A53D-7B592E724FD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DFA83E7-AE3D-4560-A53D-7B592E724FD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44147204-080F-40D8-9BA5-354881C5542B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44147204-080F-40D8-9BA5-354881C5542B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44147204-080F-40D8-9BA5-354881C5542B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44147204-080F-40D8-9BA5-354881C5542B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

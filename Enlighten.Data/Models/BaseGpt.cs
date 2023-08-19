@@ -9,6 +9,8 @@ namespace Enlighten.Data.Models
 {
     public abstract class BaseGpt
     {
+        [NotMapped]
+        public int PromptPriority { get; set; }//defined at class
         public string QuizSystemMessage { get; set; }
         public string QuizQuestionPrompt { get; set; }
         public string QuizAnswerPrompt { get; set; }

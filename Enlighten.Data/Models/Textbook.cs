@@ -4,6 +4,10 @@ namespace Enlighten.Data.Models
 {
     public class Textbook : BaseGpt
     {
+        public Textbook()
+        {
+            PromptPriority = 2;
+        }
         public int Id { get; set; }
 
         public string Name { get; set; }
