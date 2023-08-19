@@ -12,7 +12,6 @@ namespace Enlighten.Data.Infrastructure
             //dotnet-ef database update --project Enlighten.Data --startup-project Enlighten.Study.Web
         }
 
-        public DbSet<Course> Schools { get; set; }
         public DbSet<Textbook> Textbooks { get; set; }
         public DbSet<TextbookChapter> TextbookChapters { get; set; }
 

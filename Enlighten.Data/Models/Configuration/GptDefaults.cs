@@ -1,16 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Enlighten.Data.Models
+namespace Enlighten.Data.Models.Configuration
 {
-    public class Textbook : IBaseGpt
+    internal class GptDefaults : IBaseGpt
     {
         public int Id { get; set; }
-
-        public string Name { get; set; }
-        public string TextbookSummary { get; set; }
-        public virtual List<TextbookChapter> Chapters { get; set; }
-
-
         public string QuizSystemMessage { get; set; }
         public string QuizQuestionPrompt { get; set; }
         public string QuizAnswerPrompt { get; set; }
