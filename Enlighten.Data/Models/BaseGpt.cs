@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Enlighten.Data.Models
 {
-    public interface IBaseGpt
+    public abstract class BaseGpt
     {
         public string QuizSystemMessage { get; set; }
         public string QuizQuestionPrompt { get; set; }
