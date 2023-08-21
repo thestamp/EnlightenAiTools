@@ -2,7 +2,7 @@
 using Enlighten.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Enlighten.Study.Core.Services
+namespace Enlighten.Core.Services
 {
     public class TextbookService
     {

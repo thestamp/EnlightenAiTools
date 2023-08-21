@@ -1,4 +1,5 @@
-﻿using Enlighten.Data.Models;
+﻿using Enlighten.Core.Services;
+using Enlighten.Data.Models;
 using Enlighten.Gpt.Client.Configuration;
 using Enlighten.Study.Core.Configuration;
 using Enlighten.Study.Core.Services;
