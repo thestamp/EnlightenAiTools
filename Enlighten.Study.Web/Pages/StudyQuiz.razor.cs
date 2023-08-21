@@ -17,7 +17,7 @@ namespace Enlighten.Study.Web.Pages
 
         [Inject] public TextbookService TextbookService { get; set; }
 
-        [Inject] public DefaultGptAppSettingsModel GptAppDefaults { get; set; }
+        [Inject] public GptPromptService GptPromptService { get; set; }
 
         public MudTextField<string> txtAnswer { get; set; }
         public bool hasAnswer { get; set; }
@@ -78,8 +78,7 @@ namespace Enlighten.Study.Web.Pages
                 SelectedChapter = SelectedTextbook.Chapters[randomIndex];
             }
 
-            var promptSvc = new GptPromptService();
-            var promptSettings = promptSvc.RenderGptPrompt(GptAppDefaults, SelectedTextbook, SelectedChapter);
+            var promptSettings = GptPromptService.RenderGptPrompt(SelectedTextbook, SelectedChapter);
 
             botQuestion = await svc.GenerateQuestion(
                 promptSettings,
@@ -92,8 +91,8 @@ namespace Enlighten.Study.Web.Pages
         {
             _processing = true;
 
-            var promptSvc = new GptPromptService();
-            var promptSettings = promptSvc.RenderGptPrompt(GptAppDefaults, SelectedTextbook, SelectedChapter);
+
+            var promptSettings = GptPromptService.RenderGptPrompt(SelectedTextbook, SelectedChapter);
 
             var svc = new StudyQuizService(GptClientSettingsModel);
             var response = await svc.GenerateQuestionResponseAnswer(

@@ -1,3 +1,5 @@
+using Enlighten.Core.Models;
+using Enlighten.Core.Services;
 using Enlighten.Data.Configuration;
 using Enlighten.Data.Infrastructure;
 using Enlighten.Gpt.Client.Configuration;
@@ -14,7 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
 builder.Services.AddTransient<TextbookService>();//dbcontext should be injected too, since we are using it in the service
-
 
 //settings
 var configuration = new ConfigurationBuilder()
@@ -43,6 +44,8 @@ builder.Services.AddSingleton(gptDefaults);
 
 //ef context
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(dataSettingsModel.DataContext));
+builder.Services.AddTransient<GptPromptService>();//all the constructors are injected too
+
 
 
 // Add services to the container.

@@ -3,12 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Enlighten.Core.Models;
+using Enlighten.Data.Infrastructure;
 using Enlighten.Data.Models;
+using Enlighten.Data.Models.Configuration;
 
 namespace Enlighten.Core.Services
 {
     public class GptPromptService
     {
+        private readonly DefaultGptAppSettingsModel _appDefaults;
+        private readonly GptDataSettingsModel _dataSettingsModel;
+
+        public GptPromptService(DefaultGptAppSettingsModel appDefaults,
+            DataContext dataContext)
+        {
+            _appDefaults = appDefaults;
+            _dataSettingsModel = dataContext.GptDataSettings.First();
+        }
         public class GptPromptRenderModel : BaseGpt
         {
 
@@ -16,6 +28,10 @@ namespace Enlighten.Core.Services
 
         public GptPromptRenderModel RenderGptPrompt(params BaseGpt[] gptPromptModels)
         {
+            var modelsUnSorted = gptPromptModels.ToArray(); //clone array
+            modelsUnSorted.Append(_appDefaults);
+            modelsUnSorted.Append(_dataSettingsModel);
+
             var modelsSorted = gptPromptModels.OrderBy(i => i.PromptPriority);
             var result = new GptPromptRenderModel();
 

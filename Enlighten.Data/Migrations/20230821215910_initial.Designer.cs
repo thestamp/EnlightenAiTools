@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Enlighten.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230821211826_gptSettings")]
-    partial class gptSettings
+    [Migration("20230821215910_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
