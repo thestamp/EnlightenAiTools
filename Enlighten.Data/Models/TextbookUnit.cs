@@ -2,9 +2,9 @@
 
 namespace Enlighten.Data.Models
 {
-    public class TextbookChapter : BaseGpt
+    public class TextbookUnit : BaseGpt
     {
-        public TextbookChapter()
+        public TextbookUnit()
         {
             PromptPriority = 3;
         }

@@ -4,23 +4,23 @@
 <MudTextField @bind-Value="Textbook.Name" Label="Textbook Name"  Variant="Variant.Text" />
 <MudTextField @bind-Value="Textbook.Summary" Label="Textbook Gpt Summary" HelperText="Introduce GPT to this textbook" Variant="Variant.Text" />
 
-<MudButton Color="Color.Primary">Add Chapter</MudButton>
-@foreach (var chapter in Textbook.Chapters)
+<MudButton Color="Color.Primary">Add Unit</MudButton>
+@foreach (var unit in Textbook.Units)
 {
     <MudCard>
         <MudCardHeader>
             <CardHeaderContent>
-                <MudText Typo="Typo.h6">@chapter.Name</MudText>
+                <MudText Typo="Typo.h6">@unit.Name</MudText>
             </CardHeaderContent>
             <CardHeaderActions>
                 <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardContent>
-            <MudText Typo="Typo.body2">@chapter.Summary</MudText>
+            <MudText Typo="Typo.body2">@unit.Summary</MudText>
         </MudCardContent>
         <MudCardActions>
-            @*<MudButton Variant="Variant.Text" Color="Color.Primary">@textbook.Chapters.Count Chapters</MudButton>*@
+            @*<MudButton Variant="Variant.Text" Color="Color.Primary">@textbook.Units.Count Units</MudButton>*@
             <MudIconButton Icon="@Icons.Material.Filled.Remove" Color="Color.Error" />
         </MudCardActions>
     </MudCard>

@@ -17,13 +17,13 @@ namespace Enlighten.Study.Core.Services
             _clientSettings = clientSettings;
         }
 
-        public async Task<IAsyncEnumerable<string>> InquireTextbookChapter(TextbookChapter chapter, string inquiry)
+        public async Task<IAsyncEnumerable<string>> InquireTextbookUnit(TextbookUnit unit, string inquiry)
         {
             var client = new GptClientService(_clientSettings);
 
             client.Connect();
             
-            var conversationSettings = GetQuestionSettings($"Textbook Summary: {chapter.Textbook.Summary} Chapter {chapter.Name} Content: {chapter.Content}");
+            var conversationSettings = GetQuestionSettings($"Textbook Summary: {unit.Textbook.Summary} Unit {unit.Name} Content: {unit.Content}");
 
             // The bot is requested to generate a short-answer question based on the textbook content
             var response = await client.StreamResponse(conversationSettings, $"{_settings.InquireSettings.InquiryPrompt} ' " + inquiry + "': ");

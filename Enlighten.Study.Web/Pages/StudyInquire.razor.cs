@@ -22,7 +22,7 @@ namespace Enlighten.Study.Web.Pages
         public bool _processing = false;
 
         
-        public TextbookChapter? SelectedChapter { get; set; }
+        public TextbookUnit? SelectedUnit { get; set; }
         public List<Textbook> Textbooks { get; set; }
         public Textbook? SelectedTextbook { get; set; }
         public string botResponse { get; set; }
@@ -33,14 +33,14 @@ namespace Enlighten.Study.Web.Pages
             Textbooks = await TextbookService.GetTextbooks();
         }
 
-        //public async Task RefreshChapters(ChangeEventArgs e)
+        //public async Task RefreshUnits(ChangeEventArgs e)
         //{
         //    if (SelectedTextbook == null)
         //    {
         //        return;
         //    }
 
-        //    Chapters = await TextbookService.GetTextbookChapters(SelectedTextbook);
+        //    Units = await TextbookService.GetTextbookUnits(SelectedTextbook);
         //}
 
         public async Task Enter(KeyboardEventArgs e)
@@ -58,7 +58,7 @@ namespace Enlighten.Study.Web.Pages
             _processing = true;
             botResponse = "";
             var svc = new StudyInquireService(CoreSettingsModel, GptClientSettingsModel);
-            var response = await svc.InquireTextbookChapter(SelectedChapter, InquiryText);
+            var response = await svc.InquireTextbookUnit(SelectedUnit, InquiryText);
             await foreach (var res in response)
             {
                 botResponse += res;

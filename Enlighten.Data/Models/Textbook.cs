@@ -12,6 +12,6 @@ namespace Enlighten.Data.Models
 
         public string Name { get; set; }
         public string Summary { get; set; }
-        public virtual List<TextbookChapter> Chapters { get; set; }
+        public virtual List<TextbookUnit> Units { get; set; }
     }
 }

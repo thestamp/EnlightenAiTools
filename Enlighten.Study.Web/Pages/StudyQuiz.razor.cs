@@ -27,28 +27,28 @@ namespace Enlighten.Study.Web.Pages
         public bool _processing = false;
 
         
-        public TextbookChapter? SelectedChapter { get; set; }
+        public TextbookUnit? SelectedUnit { get; set; }
         public List<Textbook> Textbooks { get; set; }
         public Textbook? SelectedTextbook { get; set; }
         public string botQuestion { get; set; }
         public string userAnswer { get; set; }
         public string botAnswerResponse { get; set; }
 
-        public bool IsRandomChapter { get; set; }
+        public bool IsRandomUnit { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             Textbooks = await TextbookService.GetTextbooks();
         }
 
-        //public async Task RefreshChapters(ChangeEventArgs e)
+        //public async Task RefreshUnits(ChangeEventArgs e)
         //{
         //    if (SelectedTextbook == null)
         //    {
         //        return;
         //    }
 
-        //    Chapters = await TextbookService.GetTextbookChapters(SelectedTextbook);
+        //    Units = await TextbookService.GetTextbookUnits(SelectedTextbook);
         //}
 
         //public async Task Enter(KeyboardEventArgs e)
@@ -71,19 +71,19 @@ namespace Enlighten.Study.Web.Pages
             _processing = true;
             var svc = new StudyQuizService(GptClientSettingsModel);
 
-            //if random chapter is selected, we will select a random chapter
-            if (IsRandomChapter && SelectedTextbook != null)
+            //if random unit is selected, we will select a random unit
+            if (IsRandomUnit && SelectedTextbook != null)
             {
-                var randomIndex = new Random().Next(SelectedTextbook.Chapters.Count - 1);
-                SelectedChapter = SelectedTextbook.Chapters[randomIndex];
+                var randomIndex = new Random().Next(SelectedTextbook.Units.Count - 1);
+                SelectedUnit = SelectedTextbook.Units[randomIndex];
             }
 
-            var promptSettings = GptPromptService.RenderGptPrompt(SelectedTextbook, SelectedChapter);
+            var promptSettings = GptPromptService.RenderGptPrompt(SelectedTextbook, SelectedUnit);
 
             botQuestion = await svc.GenerateQuestion(
                 promptSettings,
                 "TEXTBOOK SUMMARY: " + SelectedTextbook.Summary 
-                +"CHAPTER CONTENT: " + SelectedChapter.Content);
+                +"UNIT CONTENT: " + SelectedUnit.Content);
             _processing = false;
         }
 
@@ -92,13 +92,13 @@ namespace Enlighten.Study.Web.Pages
             _processing = true;
 
 
-            var promptSettings = GptPromptService.RenderGptPrompt(SelectedTextbook, SelectedChapter);
+            var promptSettings = GptPromptService.RenderGptPrompt(SelectedTextbook, SelectedUnit);
 
             var svc = new StudyQuizService(GptClientSettingsModel);
             var response = await svc.GenerateQuestionResponseAnswer(
                 promptSettings,
                 "TEXTBOOK SUMMARY: " + SelectedTextbook.Summary
-                + "CHAPTER CONTENT: " + SelectedChapter.Content
+                + "UNIT CONTENT: " + SelectedUnit.Content
                 , botQuestion, userAnswer);
             var responseContent = "";
             await foreach (var res in response)

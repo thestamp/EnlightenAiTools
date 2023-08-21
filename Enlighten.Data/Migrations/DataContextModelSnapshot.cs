@@ -111,7 +111,7 @@ namespace Enlighten.Data.Migrations
                     b.ToTable("Textbooks");
                 });
 
-            modelBuilder.Entity("Enlighten.Data.Models.TextbookChapter", b =>
+            modelBuilder.Entity("Enlighten.Data.Models.TextbookUnit", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -166,13 +166,13 @@ namespace Enlighten.Data.Migrations
 
                     b.HasIndex("TextbookId");
 
-                    b.ToTable("TextbookChapters");
+                    b.ToTable("TextbookUnits");
                 });
 
-            modelBuilder.Entity("Enlighten.Data.Models.TextbookChapter", b =>
+            modelBuilder.Entity("Enlighten.Data.Models.TextbookUnit", b =>
                 {
                     b.HasOne("Enlighten.Data.Models.Textbook", "Textbook")
-                        .WithMany("Chapters")
+                        .WithMany("Units")
                         .HasForeignKey("TextbookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -182,7 +182,7 @@ namespace Enlighten.Data.Migrations
 
             modelBuilder.Entity("Enlighten.Data.Models.Textbook", b =>
                 {
-                    b.Navigation("Chapters");
+                    b.Navigation("Units");
                 });
 #pragma warning restore 612, 618
         }

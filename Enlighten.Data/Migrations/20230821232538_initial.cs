@@ -36,7 +36,7 @@ namespace Enlighten.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TextbookSummary = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuizSystemMessage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuizQuestionPrompt = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuizAnswerPrompt = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -51,14 +51,15 @@ namespace Enlighten.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TextbookChapters",
+                name: "TextbookUnits",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TextbookId = table.Column<int>(type: "int", nullable: false),
-                    ChapterName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ChapterContent = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuizSystemMessage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuizQuestionPrompt = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuizAnswerPrompt = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -69,9 +70,9 @@ namespace Enlighten.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TextbookChapters", x => x.Id);
+                    table.PrimaryKey("PK_TextbookUnits", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TextbookChapters_Textbooks_TextbookId",
+                        name: "FK_TextbookUnits_Textbooks_TextbookId",
                         column: x => x.TextbookId,
                         principalTable: "Textbooks",
                         principalColumn: "Id",
@@ -79,8 +80,8 @@ namespace Enlighten.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_TextbookChapters_TextbookId",
-                table: "TextbookChapters",
+                name: "IX_TextbookUnits_TextbookId",
+                table: "TextbookUnits",
                 column: "TextbookId");
         }
 
@@ -91,7 +92,7 @@ namespace Enlighten.Data.Migrations
                 name: "GptDataSettings");
 
             migrationBuilder.DropTable(
-                name: "TextbookChapters");
+                name: "TextbookUnits");
 
             migrationBuilder.DropTable(
                 name: "Textbooks");

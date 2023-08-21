@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Enlighten.Admin.Web.Pages
 {
-    public class ManageTextbookBase : ComponentBase
+    public class EditTextbookBase : ComponentBase
     {
         public Textbook Textbook { get; set; }
     }

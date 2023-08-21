@@ -34,15 +34,15 @@ namespace Enlighten.Admin.Core.Services
             _context.Textbooks.Remove(textbook);
         }
 
-        public void AddTextbookChapter(Textbook textbook, TextbookChapter chapter)
+        public void AddTextbookUnit(Textbook textbook, TextbookUnit unit)
         {
-            chapter.Textbook = textbook;
-            textbook.Chapters.Add(chapter);
+            unit.Textbook = textbook;
+            textbook.Units.Add(unit);
         }
 
-        public void DeleteTextbookChapter(TextbookChapter chapter)
+        public void DeleteTextbookUnit(TextbookUnit unit)
         {
-            _context.TextbookChapters.Remove(chapter);
+            _context.TextbookUnits.Remove(unit);
         }
     }
 }

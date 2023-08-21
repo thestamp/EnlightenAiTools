@@ -14,7 +14,7 @@ namespace Enlighten.Data.Infrastructure
         }
 
         public DbSet<Textbook> Textbooks { get; set; }
-        public DbSet<TextbookChapter> TextbookChapters { get; set; }
+        public DbSet<TextbookUnit> TextbookUnits { get; set; }
         public DbSet<GptDataSettingsModel> GptDataSettings { get; set; }
 
     }
