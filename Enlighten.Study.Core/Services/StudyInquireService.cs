@@ -23,7 +23,7 @@ namespace Enlighten.Study.Core.Services
 
             client.Connect();
             
-            var conversationSettings = GetQuestionSettings($"Textbook Summary: {chapter.Textbook.TextbookSummary} Chapter {chapter.ChapterName} Content: {chapter.ChapterContent}");
+            var conversationSettings = GetQuestionSettings($"Textbook Summary: {chapter.Textbook.Summary} Chapter {chapter.Name} Content: {chapter.Content}");
 
             // The bot is requested to generate a short-answer question based on the textbook content
             var response = await client.StreamResponse(conversationSettings, $"{_settings.InquireSettings.InquiryPrompt} ' " + inquiry + "': ");

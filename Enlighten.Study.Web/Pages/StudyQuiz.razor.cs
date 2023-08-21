@@ -82,8 +82,8 @@ namespace Enlighten.Study.Web.Pages
 
             botQuestion = await svc.GenerateQuestion(
                 promptSettings,
-                "TEXTBOOK SUMMARY: " + SelectedTextbook.TextbookSummary 
-                +"CHAPTER CONTENT: " + SelectedChapter.ChapterContent);
+                "TEXTBOOK SUMMARY: " + SelectedTextbook.Summary 
+                +"CHAPTER CONTENT: " + SelectedChapter.Content);
             _processing = false;
         }
 
@@ -97,8 +97,8 @@ namespace Enlighten.Study.Web.Pages
             var svc = new StudyQuizService(GptClientSettingsModel);
             var response = await svc.GenerateQuestionResponseAnswer(
                 promptSettings,
-                "TEXTBOOK SUMMARY: " + SelectedTextbook.TextbookSummary
-                + "CHAPTER CONTENT: " + SelectedChapter.ChapterContent
+                "TEXTBOOK SUMMARY: " + SelectedTextbook.Summary
+                + "CHAPTER CONTENT: " + SelectedChapter.Content
                 , botQuestion, userAnswer);
             var responseContent = "";
             await foreach (var res in response)

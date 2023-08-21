@@ -11,7 +11,7 @@ namespace Enlighten.Data.Models
         public int Id { get; set; }
 
         public string Name { get; set; }
-        public string TextbookSummary { get; set; }
+        public string Summary { get; set; }
         public virtual List<TextbookChapter> Chapters { get; set; }
     }
 }

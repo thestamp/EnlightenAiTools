@@ -22,7 +22,7 @@
             {
                 @foreach (var item in SelectedTextbook.Chapters)
                 {
-                    <MudSelectItem Value="@item">@item.ChapterName</MudSelectItem>
+                    <MudSelectItem Value="@item">@item.Name</MudSelectItem>
                 }
             }
            
@@ -53,7 +53,7 @@
 
             <MudCard>
                 <MudCardContent>
-                    <MudText>@SelectedChapter?.ChapterName Question!</MudText>
+                    <MudText>@SelectedChapter?.Name Question!</MudText>
                     <MudMarkdown Value="@botQuestion"/>
 
                 <MudTextField @ref="txtAnswer" @bind-Value="@userAnswer" Label="Your Answer" Multiline="true" Rows="2" Variant="Variant.Outlined" Class="mt-4" Disabled="_processing" />
