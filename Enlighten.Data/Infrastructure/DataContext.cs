@@ -1,4 +1,5 @@
 ﻿using Enlighten.Data.Models;
+using Enlighten.Data.Models.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace Enlighten.Data.Infrastructure
@@ -14,6 +15,7 @@ namespace Enlighten.Data.Infrastructure
 
         public DbSet<Textbook> Textbooks { get; set; }
         public DbSet<TextbookChapter> TextbookChapters { get; set; }
+        public DbSet<GptDataSettingsModel> GptDataSettings { get; set; }
 
     }
 }

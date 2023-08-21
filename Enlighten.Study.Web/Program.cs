@@ -37,6 +37,10 @@ var dataSettingsModel = new DataSettingsModel();
 configuration.GetSection("DataSettings").Bind(dataSettingsModel);
 builder.Services.AddSingleton(dataSettingsModel);
 
+var gptDefaults = new DefaultGptAppSettingsModel();
+configuration.GetSection("GptAppDefaults").Bind(gptDefaults);
+builder.Services.AddSingleton(gptDefaults);
+
 //ef context
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(dataSettingsModel.DataContext));
 

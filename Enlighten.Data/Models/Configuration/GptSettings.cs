@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Enlighten.Data.Models.Configuration
 {
-    public class GptDefaults : BaseGpt
+    public class GptDataSettingsModel: BaseGpt
     {
-        public GptDefaults()
+        public GptDataSettingsModel()
         {
             PromptPriority = 1;
         }
