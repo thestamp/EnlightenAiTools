@@ -1,7 +1,14 @@
 using Enlighten.Admin.Web.Data;
+using Enlighten.Core.Models;
+using Enlighten.Core.Services;
+using Enlighten.Data.Configuration;
+using Enlighten.Data.Infrastructure;
+using Enlighten.Gpt.Client.Configuration;
+using Enlighten.Study.Core.Configuration;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +18,42 @@ StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configurat
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+
+
+
+builder.Services.AddTransient<TextbookService>();//dbcontext should be injected too, since we are using it in the service
+
+//settings
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddUserSecrets<Program>()
+    .Build();
+
+
+var coreSettings = new CoreSettingsModel();
+configuration.GetSection("CoreSettings").Bind(coreSettings);
+builder.Services.AddSingleton(coreSettings);
+
+
+var gptClientSettings = new GptClientSettingsModel();
+configuration.GetSection("GptClientSettings").Bind(gptClientSettings);
+builder.Services.AddSingleton(gptClientSettings);
+
+
+var dataSettingsModel = new DataSettingsModel();
+configuration.GetSection("DataSettings").Bind(dataSettingsModel);
+builder.Services.AddSingleton(dataSettingsModel);
+
+var gptDefaults = new DefaultGptAppSettingsModel();
+configuration.GetSection("GptAppDefaults").Bind(gptDefaults);
+builder.Services.AddSingleton(gptDefaults);
+
+//ef context
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(dataSettingsModel.DataContext));
+builder.Services.AddTransient<GptPromptService>();//all the constructors are injected too
+
+
+
 builder.Services.AddMudServices();
 
 var app = builder.Build();
