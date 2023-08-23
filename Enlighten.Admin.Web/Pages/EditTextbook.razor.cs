@@ -34,11 +34,20 @@ namespace Enlighten.Admin.Web.Pages
             {
                 TextbookService.AddTextbook(Textbook);
             }
+            else
+            {
+                TextbookService.UpdateTextbook(Textbook);
+            }
 
             await DataContext.SaveChangesAsync();
 
-            NavigationManager.NavigateTo("/Textbooks");
+            Back();
 
+        }
+
+        public void Back()
+        {
+            NavigationManager.NavigateTo("/Textbooks");
         }
 
     }

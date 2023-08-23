@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Enlighten.Core.Services;
 using Enlighten.Data.Infrastructure;
 using Enlighten.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Enlighten.Admin.Core.Services
 {
@@ -31,6 +32,25 @@ namespace Enlighten.Admin.Core.Services
         {
             _context.Textbooks.Add(textbook);
         }
+
+        public void UpdateTextbook(Textbook textbook)
+        {
+            // Check if the entity is already being tracked
+            var existingTextbook= _context.Textbooks.Find(textbook.Id);
+
+            // If not, attach and set its state to Modified to flag for an update
+            if (existingTextbook == null)
+            {
+                _context.Textbooks.Attach(textbook);
+                _context.Entry(textbook).State = EntityState.Modified;
+            }
+            else
+            {
+                // If already tracked, you can update the entry with the new values
+                _context.Entry(existingTextbook).CurrentValues.SetValues(textbook);
+            }
+        }
+
 
         public void DeleteTextbook(Textbook textbook)
         {

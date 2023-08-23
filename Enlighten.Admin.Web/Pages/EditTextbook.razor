@@ -5,6 +5,8 @@
 <h3>Edit Textbook</h3>
 
 <MudButton OnClick="Save" Color="Color.Primary">Save Textbook</MudButton>
+<br />
+<MudButton OnClick="Back" Color="Color.Primary">Go Back</MudButton>
 
 <MudTextField @bind-Value="Textbook.Name" Label="Textbook Name"  Variant="Variant.Text" />
 <MudTextField @bind-Value="Textbook.Summary" Label="Textbook Gpt Summary" HelperText="Introduce GPT to this textbook" Variant="Variant.Text" />

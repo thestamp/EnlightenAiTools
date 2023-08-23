@@ -50,8 +50,6 @@ var gptDefaults = new DefaultGptAppSettingsModel();
 configuration.GetSection("GptAppDefaults").Bind(gptDefaults);
 builder.Services.AddSingleton(gptDefaults);
 
-//by injecting the factory, this will allow us to create a new context in each page
-//builder.Services.AddDbContextFactory<DataContext>(options => options.UseSqlServer(dataSettingsModel.DataContext));
 //or we can use this if we don't care so much
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(dataSettingsModel.DataContext));
 builder.Services.AddTransient<GptPromptService>();//all the constructors are injected too
