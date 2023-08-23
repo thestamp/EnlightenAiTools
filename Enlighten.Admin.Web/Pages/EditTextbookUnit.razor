@@ -2,3 +2,9 @@
 <h3>EditTextbookUnit</h3>
 
 
+<MudTextField T="string" Label="Name" @bind-Value="Unit.Name" Variant="Variant.Outlined" Lines="3" />
+
+<MudTextField T="string" Label="Content" @bind-Value="Unit.Content" Variant="Variant.Outlined" Lines="3" />
+<MudTextField T="string" Label="Summary" @bind-Value="Unit.Summary" Variant="Variant.Outlined" Lines="3" />
+
+<GptSettingsComponent Settings="Unit"></GptSettingsComponent>

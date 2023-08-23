@@ -5,6 +5,7 @@ namespace Enlighten.Admin.Web.Pages
 {
     public class GptSettingsComponentBase : ComponentBase
     {
-        public BaseGpt settings { get; set; }
+        [Parameter]
+        public BaseGpt Settings { get; set; }
     }
 }
