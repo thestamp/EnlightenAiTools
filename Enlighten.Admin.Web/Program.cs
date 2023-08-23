@@ -1,3 +1,4 @@
+using Enlighten.Admin.Core.Services;
 using Enlighten.Admin.Web.Data;
 using Enlighten.Core.Models;
 using Enlighten.Core.Services;
@@ -22,6 +23,7 @@ builder.Services.AddServerSideBlazor();
 
 
 builder.Services.AddTransient<TextbookService>();//dbcontext should be injected too, since we are using it in the service
+builder.Services.AddTransient<TextbookAdminService>();//dbcontext should be injected too, since we are using it in the service
 
 //settings
 var configuration = new ConfigurationBuilder()

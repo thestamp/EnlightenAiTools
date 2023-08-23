@@ -3,7 +3,7 @@
 @page "/Textbooks"
 <h3>Textbook List</h3>
 
-<MudButton Color="Color.Primary" OnClick="AddTextbook">Add Textbook</MudButton>
+<MudButton Href="EditTextbook" Color="Color.Primary" OnClick="AddTextbook">Add Textbook</MudButton>
 @foreach (var textbook in Textbooks)
 {
     <MudCard>
@@ -12,7 +12,7 @@
                 <MudText Typo="Typo.h6">@textbook.Name</MudText>
             </CardHeaderContent>
             <CardHeaderActions>
-                <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+                <MudIconButton Href="@($"/EditTextbook/{textbook.Id}")" Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardContent>

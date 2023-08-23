@@ -1,4 +1,7 @@
-﻿@inherits EditTextbookBase
+﻿@page "/EditTextbook"
+@page "/EditTextbook/{id:int}"
+
+@inherits EditTextbookBase
 <h3>ManageTextbook</h3>
 
 <MudTextField @bind-Value="Textbook.Name" Label="Textbook Name"  Variant="Variant.Text" />

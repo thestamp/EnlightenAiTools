@@ -21,7 +21,10 @@ namespace Enlighten.Admin.Core.Services
 
         public Textbook CreateTextbook()
         {
-            return new Textbook();
+            return new Textbook()
+            {
+                Units = new List<TextbookUnit>()
+            };
         }
 
         public void AddTextbook(Textbook textbook)
