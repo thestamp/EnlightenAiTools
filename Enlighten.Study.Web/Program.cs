@@ -1,3 +1,4 @@
+using Common.Web;
 using Enlighten.Core.Models;
 using Enlighten.Core.Services;
 using Enlighten.Data.Configuration;
@@ -23,24 +24,11 @@ var configuration = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
     .Build();
 
+var coreSettings = configuration.BindAndAddSingleton<CoreSettingsModel>(builder.Services, "CoreSettings");
+var gptClientSettings = configuration.BindAndAddSingleton<GptClientSettingsModel>(builder.Services, "GptClientSettings");
+var dataSettingsModel = configuration.BindAndAddSingleton<DataSettingsModel>(builder.Services, "DataSettings");
+var gptDefaults = configuration.BindAndAddSingleton<DefaultGptAppSettingsModel>(builder.Services, "GptAppDefaults");
 
-var coreSettings = new CoreSettingsModel();
-configuration.GetSection("CoreSettings").Bind(coreSettings);
-builder.Services.AddSingleton(coreSettings);
-
-
-var gptClientSettings = new GptClientSettingsModel();
-configuration.GetSection("GptClientSettings").Bind(gptClientSettings);
-builder.Services.AddSingleton(gptClientSettings);
-
-
-var dataSettingsModel = new DataSettingsModel();
-configuration.GetSection("DataSettings").Bind(dataSettingsModel);
-builder.Services.AddSingleton(dataSettingsModel);
-
-var gptDefaults = new DefaultGptAppSettingsModel();
-configuration.GetSection("GptAppDefaults").Bind(gptDefaults);
-builder.Services.AddSingleton(gptDefaults);
 
 //ef context
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(dataSettingsModel.DataContext));

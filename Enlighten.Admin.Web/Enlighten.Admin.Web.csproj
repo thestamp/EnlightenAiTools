@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Common.Web\Common.Web.csproj" />
     <ProjectReference Include="..\Enlighten.Admin.Core\Enlighten.Admin.Core.csproj" />
     <ProjectReference Include="..\Enlighten.Core\Enlighten.Core.csproj" />
     <ProjectReference Include="..\Enlighten.Data\Enlighten.Data.csproj" />
