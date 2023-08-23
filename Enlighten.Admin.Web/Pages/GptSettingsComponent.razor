@@ -1,0 +1,9 @@
+﻿@inherits GptSettingsComponentBase
+<h3>Quiz</h3>
+<MudTextField T="string" Label="System Message" @bind-Value="settings.QuizSystemMessage" Variant="Variant.Outlined" Lines="3" />
+<MudTextField T="string" Label="Question Prompt" @bind-Value="settings.QuizQuestionPrompt"  Variant="Variant.Outlined" Lines="3" />
+<MudTextField T="string" Label="Question Answer Prompt" @bind-Value="settings.QuizAnswerPrompt" Variant="Variant.Outlined" Lines="3" />
+
+<h3>Inquiry</h3>
+<MudTextField T="string" Label="System Message" @bind-Value="settings.InquireSystemMessage" Variant="Variant.Outlined" Lines="3" />
+<MudTextField T="string" Label="Question Prompt" @bind-Value="settings.InquirePrompt" Variant="Variant.Outlined" Lines="3" />

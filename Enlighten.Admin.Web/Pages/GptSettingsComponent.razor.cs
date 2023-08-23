@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Enlighten.Admin.Web.Pages
 {
-    public class GptSettingsBase : ComponentBase
+    public class GptSettingsComponentBase : ComponentBase
     {
         public BaseGpt settings { get; set; }
     }

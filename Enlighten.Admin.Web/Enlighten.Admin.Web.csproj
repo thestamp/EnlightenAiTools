@@ -11,7 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Enlighten.Core\Enlighten.Core.csproj" />
     <ProjectReference Include="..\Enlighten.Data\Enlighten.Data.csproj" />
+    <ProjectReference Include="..\Enlighten.Gpt.Client\Enlighten.Gpt.Client.csproj" />
+    <ProjectReference Include="..\Enlighten.Study.Core\Enlighten.Study.Core.csproj" />
   </ItemGroup>
 
 </Project>
