@@ -28,44 +28,39 @@ namespace Enlighten.Admin.Core.Services
             };
         }
 
-        public void AddTextbook(Textbook textbook)
+        public async Task AddTextbook(Textbook textbook)
         {
-            _context.Textbooks.Add(textbook);
+            await _context.AddEntity(textbook);
         }
 
-        public void UpdateTextbook(Textbook textbook)
+        public async Task UpdateTextbook(Textbook textbook)
         {
-            // Check if the entity is already being tracked
-            var existingTextbook= _context.Textbooks.Find(textbook.Id);
-
-            // If not, attach and set its state to Modified to flag for an update
-            if (existingTextbook == null)
-            {
-                _context.Textbooks.Attach(textbook);
-                _context.Entry(textbook).State = EntityState.Modified;
-            }
-            else
-            {
-                // If already tracked, you can update the entry with the new values
-                _context.Entry(existingTextbook).CurrentValues.SetValues(textbook);
-            }
+            await _context.UpdateEntity(textbook);
         }
 
 
-        public void DeleteTextbook(Textbook textbook)
+        public async Task DeleteTextbook(Textbook textbook)
         {
-            _context.Textbooks.Remove(textbook);
+            await _context.DeleteEntity(textbook);
         }
 
-        public void AddTextbookUnit(Textbook textbook, TextbookUnit unit)
+        public async Task AddTextbookUnit(Textbook textbook, TextbookUnit unit)
         {
             unit.Textbook = textbook;
             textbook.Units.Add(unit);
+            await _context.AddEntity(unit);
         }
 
-        public void DeleteTextbookUnit(TextbookUnit unit)
+        public async Task UpdateTextbookUnit(TextbookUnit unit)
         {
-            _context.TextbookUnits.Remove(unit);
+            await _context.UpdateEntity(unit);
+        }
+
+        public async Task DeleteTextbookUnit(TextbookUnit unit)
+        {
+            unit.Textbook.Units.Remove(unit);
+            await _context.DeleteEntity(unit);
+
         }
     }
 }

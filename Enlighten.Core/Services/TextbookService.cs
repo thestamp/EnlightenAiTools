@@ -15,22 +15,22 @@ namespace Enlighten.Core.Services
 
         public async Task<List<Textbook>> GetTextbooks()
         {
-            return await Task.FromResult(_dataContext.Textbooks.Include(j => j.Units).AsNoTracking().ToList());
+            return await Task.FromResult(_dataContext.Textbooks.Include(j => j.Units).ToList());
         }
 
         public async Task<Textbook> GetTextbook(int id)
         {
-            return await Task.FromResult(_dataContext.Textbooks.Include(j => j.Units).AsNoTracking().First(x => x.Id == id));
+            return await Task.FromResult(_dataContext.Textbooks.Include(j => j.Units).First(x => x.Id == id));
         }
 
         public async Task<List<TextbookUnit>> GetTextbookUnits(Textbook textbook)
         {
-            return await Task.FromResult(_dataContext.TextbookUnits.AsNoTracking().Where(x => x.Textbook.Id == textbook.Id).ToList());
+            return await Task.FromResult(_dataContext.TextbookUnits.Where(x => x.Textbook.Id == textbook.Id).ToList());
         }   
 
         public async Task<TextbookUnit> GetTextbookUnit(Textbook textbook, int id)
         {
-            return await Task.FromResult(_dataContext.TextbookUnits.AsNoTracking().First(x => x.Textbook.Id == textbook.Id && x.Id == id));
+            return await Task.FromResult(_dataContext.TextbookUnits.First(x => x.Textbook.Id == textbook.Id && x.Id == id));
         }
       
     }
