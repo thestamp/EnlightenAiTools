@@ -44,10 +44,16 @@ namespace Enlighten.Admin.Core.Services
             await _context.DeleteEntity(textbook);
         }
 
+        public TextbookUnit CreateTextbookUnit()
+        {
+            return new TextbookUnit();
+        }
+
         public async Task AddTextbookUnit(Textbook textbook, TextbookUnit unit)
         {
             unit.Textbook = textbook;
             textbook.Units.Add(unit);
+            await _context.UpdateEntity(textbook);
             await _context.AddEntity(unit);
         }
 
@@ -62,5 +68,7 @@ namespace Enlighten.Admin.Core.Services
             await _context.DeleteEntity(unit);
 
         }
+
+       
     }
 }

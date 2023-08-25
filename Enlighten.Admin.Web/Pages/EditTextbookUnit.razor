@@ -1,6 +1,12 @@
-﻿@inherits EditTextbookUnitBase
+﻿@page "/EditTextbook/{textbookId:int}/EditUnit"
+@page "/EditTextbook/{textbookId:int}/EditUnit/{unitId:int}"
+@inherits EditTextbookUnitBase
 <h3>EditTextbookUnit</h3>
 
+
+<MudButton OnClick="Save" Color="Color.Primary">Save Unit</MudButton>
+<br />
+<MudButton OnClick="Back" Color="Color.Primary">Go Back</MudButton>
 
 <MudTextField T="string" Label="Name" @bind-Value="Unit.Name" Variant="Variant.Outlined" Lines="3" />
 

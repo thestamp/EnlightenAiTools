@@ -13,7 +13,7 @@
 
 <GptSettingsComponent Settings="Textbook"></GptSettingsComponent>
 
-<MudButton Color="Color.Primary">Add Unit</MudButton>
+<MudButton Href="@($"/EditTextbook/{Textbook.Id}/EditUnit")" Color="Color.Primary">Add Unit</MudButton>
 @foreach (var unit in Textbook.Units)
 {
     <MudCard>
@@ -22,7 +22,7 @@
                 <MudText Typo="Typo.h6">@unit.Name</MudText>
             </CardHeaderContent>
             <CardHeaderActions>
-                <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+                <MudIconButton Href="@($"/EditTextbook/{Textbook.Id}/EditUnit/{unit.Id}")" Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardContent>
