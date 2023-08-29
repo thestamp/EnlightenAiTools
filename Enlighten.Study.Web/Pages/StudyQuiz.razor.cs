@@ -2,7 +2,6 @@
 using Enlighten.Data.Models;
 using Enlighten.Data.Models.Configuration;
 using Enlighten.Gpt.Client.Configuration;
-using Enlighten.Study.Core.Configuration;
 using Enlighten.Study.Core.Services;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -11,7 +10,6 @@ namespace Enlighten.Study.Web.Pages
 {
     public class StudyQuizBase : ComponentBase
     {
-        [Inject] public CoreSettingsModel CoreSettingsModel { get; set; }
 
         [Inject] public GptClientSettingsModel GptClientSettingsModel { get; set; }
 

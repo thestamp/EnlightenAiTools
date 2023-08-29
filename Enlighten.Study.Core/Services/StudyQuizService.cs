@@ -3,7 +3,6 @@ using Enlighten.Data.Models.Configuration;
 using Enlighten.Gpt.Client.Configuration;
 using Enlighten.Gpt.Client.Services;
 using Enlighten.Gpt.Client.Services.Models;
-using Enlighten.Study.Core.Configuration;
 
 namespace Enlighten.Study.Core.Services
 {

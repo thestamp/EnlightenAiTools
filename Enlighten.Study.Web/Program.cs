@@ -4,7 +4,6 @@ using Enlighten.Core.Services;
 using Enlighten.Data.Configuration;
 using Enlighten.Data.Infrastructure;
 using Enlighten.Gpt.Client.Configuration;
-using Enlighten.Study.Core.Configuration;
 using Enlighten.Study.Core.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -24,7 +23,6 @@ var configuration = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
     .Build();
 
-var coreSettings = configuration.BindAndAddSingleton<CoreSettingsModel>(builder.Services, "CoreSettings");
 var gptClientSettings = configuration.BindAndAddSingleton<GptClientSettingsModel>(builder.Services, "GptClientSettings");
 var dataSettingsModel = configuration.BindAndAddSingleton<DataSettingsModel>(builder.Services, "DataSettings");
 var gptDefaults = configuration.BindAndAddSingleton<DefaultGptAppSettingsModel>(builder.Services, "GptAppDefaults");

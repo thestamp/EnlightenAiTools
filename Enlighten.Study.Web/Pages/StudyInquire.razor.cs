@@ -1,7 +1,6 @@
 ﻿using Enlighten.Core.Services;
 using Enlighten.Data.Models;
 using Enlighten.Gpt.Client.Configuration;
-using Enlighten.Study.Core.Configuration;
 using Enlighten.Study.Core.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -10,12 +9,12 @@ namespace Enlighten.Study.Web.Pages
 {
     public class StudyInquireBase : ComponentBase
     {
-        [Inject] public CoreSettingsModel CoreSettingsModel { get; set; }
 
         [Inject] public GptClientSettingsModel GptClientSettingsModel { get; set; }
 
         [Inject] public TextbookService TextbookService { get; set; }
 
+        [Inject] public GptPromptService GptPromptService { get; set; }
 
         public string InquiryText { get; set; }
 
@@ -57,8 +56,11 @@ namespace Enlighten.Study.Web.Pages
         {
             _processing = true;
             botResponse = "";
-            var svc = new StudyInquireService(CoreSettingsModel, GptClientSettingsModel);
-            var response = await svc.InquireTextbookUnit(SelectedUnit, InquiryText);
+            var promptSettings = GptPromptService.RenderGptPrompt(SelectedTextbook, SelectedUnit);
+
+
+            var svc = new StudyInquireService(GptClientSettingsModel);
+            var response = await svc.InquireTextbookUnit(promptSettings, SelectedUnit, InquiryText);
             await foreach (var res in response)
             {
                 botResponse += res;

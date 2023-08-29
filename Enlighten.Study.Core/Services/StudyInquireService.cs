@@ -1,40 +1,41 @@
-﻿using Enlighten.Data.Models;
+﻿using Enlighten.Core.Services;
+using Enlighten.Data.Models;
 using Enlighten.Gpt.Client.Configuration;
 using Enlighten.Gpt.Client.Services;
 using Enlighten.Gpt.Client.Services.Models;
-using Enlighten.Study.Core.Configuration;
+using System.Runtime;
 
 namespace Enlighten.Study.Core.Services
 {
     public class StudyInquireService
     {
-        private readonly CoreSettingsModel _settings;
         private readonly GptClientSettingsModel _clientSettings;
 
-        public StudyInquireService(CoreSettingsModel settings, GptClientSettingsModel clientSettings)
+        public StudyInquireService(GptClientSettingsModel clientSettings)
         {
-            _settings = settings;
             _clientSettings = clientSettings;
         }
 
-        public async Task<IAsyncEnumerable<string>> InquireTextbookUnit(TextbookUnit unit, string inquiry)
+        public async Task<IAsyncEnumerable<string>> InquireTextbookUnit(GptPromptService.GptPromptRenderModel gptPromptSettings, TextbookUnit unit, string inquiry)
         {
             var client = new GptClientService(_clientSettings);
 
             client.Connect();
-            
-            var conversationSettings = GetQuestionSettings($"Textbook Summary: {unit.Textbook.Summary} Unit {unit.Name} Content: {unit.Content}");
+
+            var conversationSettings = InitializeConversation(gptPromptSettings, unit.Content);
+
 
             // The bot is requested to generate a short-answer question based on the textbook content
-            var response = await client.StreamResponse(conversationSettings, $"{_settings.InquireSettings.InquiryPrompt} ' " + inquiry + "': ");
+            var response = await client.StreamResponse(conversationSettings, $"{gptPromptSettings.InquirePrompt} ' " + inquiry + "': ");
             return response;
         }
-
-        public ConversationSettingsModel GetQuestionSettings(string textbookContent)
+        
+        public ConversationSettingsModel InitializeConversation(GptPromptService.GptPromptRenderModel gptPromptSettings, string textbookContent)
         {
+
             var conversationSettings = new ConversationSettingsModel()
             {
-                SystemMessage = _settings.InquireSettings.SystemMessage
+                SystemMessage = gptPromptSettings.InquireSystemMessage
             };
 
             // The user provides content from a geometry textbook
@@ -45,12 +46,14 @@ namespace Enlighten.Study.Core.Services
                 var part = string.Join(" ", words.Skip(i).Take(500));
                 conversationSettings.ExampleDialogs.Add(new ConversationSettingsModel.ExampleDialog()
                 {
-                    UserInput = $"{_settings.TextbookContentSetup}:{part}",
+                    UserInput = $"{gptPromptSettings.ContentStart}:{part}",
                     BotResponse = "READY"
                 });
             }
 
             return conversationSettings;
+
+            
         }
 
     }
