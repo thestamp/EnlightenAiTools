@@ -28,11 +28,11 @@ namespace Enlighten.Core.Services
 
         public GptPromptRenderModel RenderGptPrompt(params BaseGpt[] gptPromptModels)
         {
-            var modelsUnSorted = gptPromptModels.ToArray(); //clone array
-            modelsUnSorted.Append(_appDefaults);
-            modelsUnSorted.Append(_dataSettingsModel);
+            var modelsUnSorted = gptPromptModels.ToList(); //clone array
+            modelsUnSorted.Add(_appDefaults);
+            modelsUnSorted.Add(_dataSettingsModel);
 
-            var modelsSorted = gptPromptModels.OrderBy(i => i.PromptPriority);
+            var modelsSorted = modelsUnSorted.OrderBy(i => i.PromptPriority);
             var result = new GptPromptRenderModel();
 
             foreach (var newModel in modelsSorted)
