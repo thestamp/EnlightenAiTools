@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Common.Web;
 
+//Jeffrey Lefebvre, https://github.com/thestamp/EnlightenTools
 public static class ConfigurationExtensions
 {
     public static T BindAndAddSingleton<T>(this IConfiguration configuration, IServiceCollection services, string sectionName) where T : class, new()
