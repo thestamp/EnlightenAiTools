@@ -1,9 +1,7 @@
 ﻿@inherits TextbookListBase
-
 @page "/Textbooks"
-<h3>Textbook List</h3>
-
-<MudButton Href="EditTextbook" Color="Color.Primary" OnClick="AddTextbook">Add Textbook</MudButton>
+<MudText Typo="Typo.h4">Textbook List</MudText>
+<MudButton Href="EditTextbook" Variant="Variant.Filled" Color="Color.Primary" OnClick="AddTextbook">Add Textbook</MudButton>
 @foreach (var textbook in Textbooks)
 {
     <MudCard>
@@ -15,13 +13,12 @@
                 <MudIconButton Href="@($"/EditTextbook/{textbook.Id}")" Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
             </CardHeaderActions>
         </MudCardHeader>
-        <MudCardContent>
+@*        <MudCardContent>
             <MudText Typo="Typo.body2">@textbook.Summary</MudText>
         </MudCardContent>
         <MudCardActions>
             <MudButton Variant="Variant.Text" Color="Color.Primary">@textbook.Units.Count Units</MudButton>
-            <MudIconButton Icon="@Icons.Material.Filled.Remove" Color="Color.Error" />
-        </MudCardActions>
+        </MudCardActions>*@
     </MudCard>
 }
 

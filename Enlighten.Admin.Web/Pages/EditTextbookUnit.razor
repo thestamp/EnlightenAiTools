@@ -1,12 +1,13 @@
 ﻿@page "/EditTextbook/{textbookId:int}/EditUnit"
 @page "/EditTextbook/{textbookId:int}/EditUnit/{unitId:int}"
 @inherits EditTextbookUnitBase
-<h3>EditTextbookUnit</h3>
+<MudText Typo="Typo.h4">Edit Textbook Unit</MudText>
 
 
-<MudButton OnClick="Save" Color="Color.Primary">Save Unit</MudButton>
-<br />
-<MudButton OnClick="Back" Color="Color.Primary">Go Back</MudButton>
+
+<MudButton OnClick="Save" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
+
+<MudButton OnClick="Back" Variant="Variant.Filled"  Color="Color.Error">Cancel</MudButton>
 
 <MudTextField T="string" Label="Name" @bind-Value="Unit.Name" Variant="Variant.Outlined" Lines="3" />
 
