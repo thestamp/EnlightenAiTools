@@ -50,12 +50,19 @@ namespace Enlighten.Admin.Web.Pages
         public async Task Delete()
         {
 
+            //check if units exist
             if (Textbook.Units.Any())
             {
-                await DialogService.ShowMessageBox(
+                bool? resultUnitsExist = await DialogService.ShowMessageBox(
                     "Delete Textbook",
-                    "Remove all units before deleting Textbook");
-                return;
+                    "Remove all units before deleting Textbook",
+                    yesText: "Delete Anyway!", cancelText: "Cancel");
+
+                if (!(resultUnitsExist ?? false))
+                {
+                    return;
+                }
+
             }
 
             bool? result = await DialogService.ShowMessageBox(
