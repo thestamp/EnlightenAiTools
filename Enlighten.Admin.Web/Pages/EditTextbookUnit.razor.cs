@@ -2,6 +2,7 @@
 using Enlighten.Data.Infrastructure;
 using Enlighten.Data.Models;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace Enlighten.Admin.Web.Pages
 {
@@ -48,9 +49,28 @@ namespace Enlighten.Admin.Web.Pages
 
         }
 
+        public async Task Delete()
+        {
+
+            bool? result = await DialogService.ShowMessageBox(
+                "Warning",
+                "Deleting can not be undone!",
+                yesText: "Delete!", cancelText: "Cancel");
+
+            if (result ?? false)
+            {
+                await TextbookService.DeleteTextbookUnit(Unit);
+                await DataContext.SaveChangesAsync();
+
+                Back();
+            }
+        }
+
         public void Back()
         {
             NavigationManager.NavigateTo($"/EditTextbook/{Textbook.Id}");
         }
+
+        
     }
 }

@@ -3,12 +3,14 @@ using Enlighten.Core.Services;
 using Enlighten.Data.Infrastructure;
 using Enlighten.Data.Models;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace Enlighten.Admin.Web.Pages
 {
     public class EditTextbookBase : ComponentBase
     {
         [Parameter] public int? Id { get; set; }
+        [Inject] public DialogService DialogService { get; set; }
         [Inject] public TextbookAdminService TextbookService { get; set; }
         [Inject] public DataContext DataContext { get; set; }
         [Inject] NavigationManager NavigationManager { get; set; }
@@ -45,10 +47,37 @@ namespace Enlighten.Admin.Web.Pages
 
         }
 
+        public async Task Delete()
+        {
+
+            if (Textbook.Units.Any())
+            {
+                await DialogService.ShowMessageBox(
+                    "Delete Textbook",
+                    "Remove all units before deleting Textbook");
+                return;
+            }
+
+            bool? result = await DialogService.ShowMessageBox(
+                "Warning",
+                "Deleting can not be undone!",
+                yesText: "Delete!", cancelText: "Cancel");
+
+            if (result ?? false)
+            {
+                await TextbookService.DeleteTextbook(Textbook);
+                await DataContext.SaveChangesAsync();
+
+                Back();
+            }
+        }
+
         public void Back()
         {
             NavigationManager.NavigateTo("/Textbooks");
         }
+
+        
 
     }
 }
