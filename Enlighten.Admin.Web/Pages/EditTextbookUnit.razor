@@ -16,4 +16,7 @@
 
 <GptSettingsComponent Settings="Unit"></GptSettingsComponent>
 
-<MudButton OnClick="Delete" Variant="Variant.Filled" Color="Color.Error">Delete</MudButton>
+@if (UnitId != null)
+{
+    <MudButton OnClick="Delete" Variant="Variant.Filled" Color="Color.Error">Delete</MudButton>
+}
