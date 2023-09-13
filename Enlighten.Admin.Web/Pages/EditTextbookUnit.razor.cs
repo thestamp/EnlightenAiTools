@@ -14,6 +14,7 @@ namespace Enlighten.Admin.Web.Pages
         [Inject] public TextbookAdminService TextbookService { get; set; }
         [Inject] public DataContext DataContext { get; set; }
         [Inject] NavigationManager NavigationManager { get; set; }
+        [Inject] IDialogService DialogService { get; set; }
         public TextbookUnit? Unit { get; set; }
         public Textbook Textbook { get; set; }
 

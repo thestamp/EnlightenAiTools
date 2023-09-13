@@ -41,6 +41,7 @@ namespace Enlighten.Admin.Core.Services
 
         public async Task DeleteTextbook(Textbook textbook)
         {
+            _context.Attach(textbook);
             await _context.DeleteEntity(textbook);
         }
 

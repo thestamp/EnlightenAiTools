@@ -10,7 +10,7 @@ namespace Enlighten.Admin.Web.Pages
     public class EditTextbookBase : ComponentBase
     {
         [Parameter] public int? Id { get; set; }
-        [Inject] public DialogService DialogService { get; set; }
+        [Inject] public IDialogService DialogService { get; set; }
         [Inject] public TextbookAdminService TextbookService { get; set; }
         [Inject] public DataContext DataContext { get; set; }
         [Inject] NavigationManager NavigationManager { get; set; }
