@@ -1,7 +1,9 @@
+using Common.Web;
+using Enlighten.Core.Models;
+using Enlighten.Core.Services;
 using Enlighten.Data.Configuration;
 using Enlighten.Data.Infrastructure;
 using Enlighten.Gpt.Client.Configuration;
-using Enlighten.Study.Core.Configuration;
 using Enlighten.Study.Core.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -15,30 +17,21 @@ StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configurat
 
 builder.Services.AddTransient<TextbookService>();//dbcontext should be injected too, since we are using it in the service
 
-
 //settings
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddUserSecrets<Program>()
     .Build();
 
+var gptClientSettings = configuration.BindAndAddSingleton<GptClientSettingsModel>(builder.Services, "GptClientSettings");
+var dataSettingsModel = configuration.BindAndAddSingleton<DataSettingsModel>(builder.Services, "DataSettings");
+var gptDefaults = configuration.BindAndAddSingleton<DefaultGptAppSettingsModel>(builder.Services, "GptAppDefaults");
 
-var coreSettings = new CoreSettingsModel();
-configuration.GetSection("CoreSettings").Bind(coreSettings);
-builder.Services.AddSingleton(coreSettings);
-
-
-var gptClientSettings = new GptClientSettingsModel();
-configuration.GetSection("GptClientSettings").Bind(gptClientSettings);
-builder.Services.AddSingleton(gptClientSettings);
-
-
-var dataSettingsModel = new DataSettingsModel();
-configuration.GetSection("DataSettings").Bind(dataSettingsModel);
-builder.Services.AddSingleton(dataSettingsModel);
 
 //ef context
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(dataSettingsModel.DataContext));
+builder.Services.AddTransient<GptPromptService>();//all the constructors are injected too
+
 
 
 // Add services to the container.

@@ -4,7 +4,7 @@
 
 
 <MudText Typo="Typo.h3" GutterBottom="true">Inquire</MudText>
-<MudText Class="mb-8">Have questions about a chapter? Select a textbook, chapter, and ask a question to clarify any questions you may have!</MudText>
+<MudText Class="mb-8">Have questions about a unit? Select a textbook, unit, and ask a question to clarify any questions you may have!</MudText>
 <MudContainer>
     <MudPaper Elevation="2" Rounded="true" Class="p-4 my-4">
         
@@ -16,12 +16,12 @@
         </MudSelect>
         
 
-        <MudSelect T="TextbookChapter" Label="Select Chapter" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedChapter">
+        <MudSelect T="TextbookUnit" Label="Select Unit" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedUnit">
             @if (SelectedTextbook != null)
             {
-                @foreach (var item in SelectedTextbook.Chapters)
+                @foreach (var item in SelectedTextbook.Units)
                 {
-                    <MudSelectItem Value="@item">@item.ChapterName</MudSelectItem>
+                    <MudSelectItem Value="@item">@item.Name</MudSelectItem>
                 }
             }
            
@@ -29,7 +29,7 @@
 
         <MudTextField @bind-Value="@InquiryText" Label="Inquiry" Multiline="true" Rows="2" Variant="Variant.Outlined" Class="mt-4" Disabled="_processing" />
 
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Inquire" Class="mt-4" Disabled="SelectedTextbook == null || SelectedChapter == null">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Inquire" Class="mt-4" Disabled="SelectedTextbook == null || SelectedUnit == null">
             @if (_processing)
             {
                 <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>

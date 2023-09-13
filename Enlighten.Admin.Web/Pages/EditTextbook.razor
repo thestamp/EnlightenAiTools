@@ -1,0 +1,43 @@
+﻿@page "/EditTextbook"
+@page "/EditTextbook/{id:int}"
+
+@inherits EditTextbookBase
+<MudText Typo="Typo.h4">Edit Textbook</MudText>
+
+
+<MudButton OnClick="Save" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
+
+<MudButton OnClick="Back" Variant="Variant.Filled"  Color="Color.Error">Cancel</MudButton>
+
+<MudTextField @bind-Value="Textbook.Name" Label="Textbook Name"  Variant="Variant.Text" />
+<MudTextField @bind-Value="Textbook.Summary" Label="Textbook Gpt Summary" HelperText="Introduce GPT to this textbook" Variant="Variant.Text" />
+
+<MudText Typo="Typo.h5">Textbook Units</MudText>
+<MudButton Href="@($"/EditTextbook/{Textbook.Id}/EditUnit")" Color="Color.Primary">Add Unit</MudButton>
+@foreach (var unit in Textbook.Units)
+{
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">@unit.Name</MudText>
+            </CardHeaderContent>
+            <CardHeaderActions>
+                <MudIconButton Href="@($"/EditTextbook/{Textbook.Id}/EditUnit/{unit.Id}")" Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+            </CardHeaderActions>
+        </MudCardHeader>
+@*        <MudCardContent>
+            <MudText Typo="Typo.body2">@unit.Summary</MudText>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Text" Color="Color.Primary">@textbook.Units.Count Units</MudButton>
+            <MudIconButton Icon="@Icons.Material.Filled.Remove" Color="Color.Error" />
+        </MudCardActions>*@
+    </MudCard>
+}
+
+<GptSettingsComponent Settings="Textbook"></GptSettingsComponent>
+
+@if (Id != null)
+{
+    <MudButton OnClick="Delete" Variant="Variant.Filled" Color="Color.Error">Delete</MudButton>
+}

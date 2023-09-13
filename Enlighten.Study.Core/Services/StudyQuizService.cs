@@ -1,62 +1,60 @@
-﻿using Enlighten.Gpt.Client.Configuration;
+﻿using Enlighten.Core.Services;
+using Enlighten.Data.Models.Configuration;
+using Enlighten.Gpt.Client.Configuration;
 using Enlighten.Gpt.Client.Services;
 using Enlighten.Gpt.Client.Services.Models;
-using Enlighten.Study.Core.Configuration;
 
 namespace Enlighten.Study.Core.Services
 {
     public class StudyQuizService
     {
-        private readonly CoreSettingsModel _settings;
         private readonly GptClientSettingsModel _clientSettings;
 
-        public StudyQuizService(CoreSettingsModel settings, GptClientSettingsModel clientSettings)
+        public StudyQuizService(GptClientSettingsModel clientSettings)
         {
-            _settings = settings;
             _clientSettings = clientSettings;
         }
 
-        public async Task<string> GenerateQuestion(string textbookContent)
+        public async Task<string> GenerateQuestion(GptPromptService.GptPromptRenderModel gptPromptSettings, string textbookContent)
         {
             var client = new GptClientService(_clientSettings);
 
             client.Connect();
             
 
-            var conversationSettings = GetQuestionSettings(textbookContent);
+            var conversationSettings = InitializeConversation(gptPromptSettings, textbookContent);
 
             // The bot is requested to generate a short-answer question based on the textbook content
-            var response = await client.GetResponse(conversationSettings, _settings.QuizSettings.GenerateQuestionPrompt);
+            var response = await client.GetResponse(conversationSettings, gptPromptSettings.QuizQuestionPrompt);
             return response;
         }
 
-        public async Task<IAsyncEnumerable<string>> GenerateQuestionResponseAnswer(string textbookContent, string botQuestion, string userAnswer)
+        public async Task<IAsyncEnumerable<string>> GenerateQuestionResponseAnswer(GptPromptService.GptPromptRenderModel gptPromptSettings, string textbookContent, string botQuestion, string userAnswer)
         {
             var client = new GptClientService(_clientSettings);
 
             client.Connect();
 
-            var conversationSettings = GetQuestionSettings(textbookContent);
+            var conversationSettings = InitializeConversation(gptPromptSettings, textbookContent);
 
             // catching the bot up on the question asked before
             conversationSettings.ExampleDialogs.Add(new ConversationSettingsModel.ExampleDialog()
             {
-                UserInput = _settings.QuizSettings.GenerateQuestionPrompt,
+                UserInput = gptPromptSettings.QuizQuestionPrompt,
                 BotResponse = botQuestion
             });
 
-
             // The bot is requested to generate a short-answer question based on the textbook content
-            var response = await client.StreamResponse(conversationSettings, _settings.QuizSettings.GenerateResponseAnswerPrompt.Replace("{userAnswer}", userAnswer));
+            var response = await client.StreamResponse(conversationSettings, gptPromptSettings.QuizAnswerPrompt.Replace("{userAnswer}", userAnswer));
             return response;
         }
 
 
-        public ConversationSettingsModel GetQuestionSettings(string textbookContent)
+        public ConversationSettingsModel InitializeConversation(GptPromptService.GptPromptRenderModel gptPromptSettings, string textbookContent)
         {
             var conversationSettings = new ConversationSettingsModel()
             {
-                SystemMessage = _settings.QuizSettings.SystemMessage
+                SystemMessage = gptPromptSettings.QuizSystemMessage
             };
 
             // The user provides content from a geometry textbook
@@ -67,7 +65,7 @@ namespace Enlighten.Study.Core.Services
                 var part = string.Join(" ", words.Skip(i).Take(500));
                 conversationSettings.ExampleDialogs.Add(new ConversationSettingsModel.ExampleDialog()
                 {
-                    UserInput = $"{_settings.TextbookContentSetup}:{part}",
+                    UserInput = $"{gptPromptSettings.ContentStart}:{part}",
                     BotResponse = "READY"
                 });
             }

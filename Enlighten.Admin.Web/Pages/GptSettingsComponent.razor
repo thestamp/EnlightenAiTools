@@ -1,0 +1,17 @@
+﻿@inherits GptSettingsComponentBase
+
+<MudText Typo="Typo.h5">GPT Settings Overrides</MudText>
+
+<MudPaper>
+
+<MudText Typo="Typo.h6">Quiz Generation</MudText>
+
+<MudTextField T="string" Label="System Message" @bind-Value="Settings.QuizSystemMessage" Variant="Variant.Outlined" Lines="3" />
+<MudTextField T="string" Label="Question Prompt" @bind-Value="Settings.QuizQuestionPrompt" Variant="Variant.Outlined" Lines="3" />
+<MudTextField T="string" Label="Question Answer Prompt" @bind-Value="Settings.QuizAnswerPrompt" Variant="Variant.Outlined" Lines="3" />
+
+<MudText Typo="Typo.h6">Inquiry</MudText>
+
+<MudTextField T="string" Label="System Message" @bind-Value="Settings.InquireSystemMessage" Variant="Variant.Outlined" Lines="3" />
+<MudTextField T="string" Label="Question Prompt" @bind-Value="Settings.InquirePrompt" Variant="Variant.Outlined" Lines="3" />
+</MudPaper>

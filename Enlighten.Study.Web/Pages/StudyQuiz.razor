@@ -17,20 +17,20 @@
         </MudSelect>
         
 
-        <MudSelect T="TextbookChapter" Label="Select Chapter" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedChapter" Disabled="IsRandomChapter">
+        <MudSelect T="TextbookUnit" Label="Select Unit" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedUnit" Disabled="IsRandomUnit">
             @if (SelectedTextbook != null)
             {
-                @foreach (var item in SelectedTextbook.Chapters)
+                @foreach (var item in SelectedTextbook.Units)
                 {
-                    <MudSelectItem Value="@item">@item.ChapterName</MudSelectItem>
+                    <MudSelectItem Value="@item">@item.Name</MudSelectItem>
                 }
             }
            
         </MudSelect>
 
-        <MudCheckBox T="bool" Label="Random Chapter" @bind-Checked="@IsRandomChapter"></MudCheckBox>
+        <MudCheckBox T="bool" Label="Random Unit" @bind-Checked="@IsRandomUnit"></MudCheckBox>
 
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GenerateQuestion" Class="mt-4" Disabled="SelectedTextbook == null || (SelectedChapter == null && !IsRandomChapter)">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GenerateQuestion" Class="mt-4" Disabled="SelectedTextbook == null || (SelectedUnit == null && !IsRandomUnit)">
             @if (_processing)
             {
                 <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
@@ -53,7 +53,7 @@
 
             <MudCard>
                 <MudCardContent>
-                    <MudText>@SelectedChapter?.ChapterName Question!</MudText>
+                    <MudText>@SelectedUnit?.Name Question!</MudText>
                     <MudMarkdown Value="@botQuestion"/>
 
                 <MudTextField @ref="txtAnswer" @bind-Value="@userAnswer" Label="Your Answer" Multiline="true" Rows="2" Variant="Variant.Outlined" Class="mt-4" Disabled="_processing" />
@@ -86,7 +86,7 @@
                 {
                     <MudAlert Severity="Severity.Success">@botAnswerResponse</MudAlert>
 
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GenerateQuestion" Class="mt-4" Disabled="SelectedChapter == null && !IsRandomChapter">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GenerateQuestion" Class="mt-4" Disabled="SelectedUnit == null && !IsRandomUnit">
                         @if (_processing)
                         {
                             <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>

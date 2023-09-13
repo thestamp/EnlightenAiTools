@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Enlighten.Core\Enlighten.Core.csproj" />
     <ProjectReference Include="..\Enlighten.Data\Enlighten.Data.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,7 @@
-﻿using Enlighten.Data.Models;
+﻿using Enlighten.Core.Services;
+using Enlighten.Data.Models;
+using Enlighten.Data.Models.Configuration;
 using Enlighten.Gpt.Client.Configuration;
-using Enlighten.Study.Core.Configuration;
 using Enlighten.Study.Core.Services;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -9,13 +10,12 @@ namespace Enlighten.Study.Web.Pages
 {
     public class StudyQuizBase : ComponentBase
     {
-        [Inject] public CoreSettingsModel CoreSettingsModel { get; set; }
 
         [Inject] public GptClientSettingsModel GptClientSettingsModel { get; set; }
 
         [Inject] public TextbookService TextbookService { get; set; }
 
-
+        [Inject] public GptPromptService GptPromptService { get; set; }
 
         public MudTextField<string> txtAnswer { get; set; }
         public bool hasAnswer { get; set; }
@@ -25,28 +25,28 @@ namespace Enlighten.Study.Web.Pages
         public bool _processing = false;
 
         
-        public TextbookChapter? SelectedChapter { get; set; }
+        public TextbookUnit? SelectedUnit { get; set; }
         public List<Textbook> Textbooks { get; set; }
         public Textbook? SelectedTextbook { get; set; }
         public string botQuestion { get; set; }
         public string userAnswer { get; set; }
         public string botAnswerResponse { get; set; }
 
-        public bool IsRandomChapter { get; set; }
+        public bool IsRandomUnit { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             Textbooks = await TextbookService.GetTextbooks();
         }
 
-        //public async Task RefreshChapters(ChangeEventArgs e)
+        //public async Task RefreshUnits(ChangeEventArgs e)
         //{
         //    if (SelectedTextbook == null)
         //    {
         //        return;
         //    }
 
-        //    Chapters = await TextbookService.GetTextbookChapters(SelectedTextbook);
+        //    Units = await TextbookService.GetTextbookUnits(SelectedTextbook);
         //}
 
         //public async Task Enter(KeyboardEventArgs e)
@@ -67,28 +67,36 @@ namespace Enlighten.Study.Web.Pages
 
 
             _processing = true;
-            var svc = new StudyQuizService(CoreSettingsModel, GptClientSettingsModel);
+            var svc = new StudyQuizService(GptClientSettingsModel);
 
-            //if random chapter is selected, we will select a random chapter
-            if (IsRandomChapter && SelectedTextbook != null)
+            //if random unit is selected, we will select a random unit
+            if (IsRandomUnit && SelectedTextbook != null)
             {
-                var randomIndex = new Random().Next(SelectedTextbook.Chapters.Count - 1);
-                SelectedChapter = SelectedTextbook.Chapters[randomIndex];
+                var randomIndex = new Random().Next(SelectedTextbook.Units.Count - 1);
+                SelectedUnit = SelectedTextbook.Units[randomIndex];
             }
 
+            var promptSettings = GptPromptService.RenderGptPrompt(SelectedTextbook, SelectedUnit);
+
             botQuestion = await svc.GenerateQuestion(
-                "TEXTBOOK SUMMARY: " + SelectedTextbook.TextbookSummary 
-                +"CHAPTER CONTENT: " + SelectedChapter.ChapterContent);
+                promptSettings,
+                "TEXTBOOK SUMMARY: " + SelectedTextbook.Summary 
+                +"UNIT CONTENT: " + SelectedUnit.Content);
             _processing = false;
         }
 
         public async Task GenerateResponseAnswer()
         {
             _processing = true;
-            var svc = new StudyQuizService(CoreSettingsModel, GptClientSettingsModel);
+
+
+            var promptSettings = GptPromptService.RenderGptPrompt(SelectedTextbook, SelectedUnit);
+
+            var svc = new StudyQuizService(GptClientSettingsModel);
             var response = await svc.GenerateQuestionResponseAnswer(
-                "TEXTBOOK SUMMARY: " + SelectedTextbook.TextbookSummary
-                + "CHAPTER CONTENT: " + SelectedChapter.ChapterContent
+                promptSettings,
+                "TEXTBOOK SUMMARY: " + SelectedTextbook.Summary
+                + "UNIT CONTENT: " + SelectedUnit.Content
                 , botQuestion, userAnswer);
             var responseContent = "";
             await foreach (var res in response)

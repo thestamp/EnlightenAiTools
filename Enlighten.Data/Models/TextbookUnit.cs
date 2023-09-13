@@ -3,17 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Enlighten.Data.Models
 {
-    public class Textbook : BaseGpt
+    public class TextbookUnit : BaseGpt
     {
-        public Textbook()
+        public TextbookUnit()
         {
-            PromptPriority = 2;
+            PromptPriority = 3;
         }
         [Key]
         public int Id { get; set; }
-
+        public virtual Textbook Textbook { get; set; }
         public string Name { get; set; }
         public string Summary { get; set; }
-        public virtual List<TextbookUnit> Units { get; set; }
+        public string? Content { get; set; }
     }
 }

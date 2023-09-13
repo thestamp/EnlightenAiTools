@@ -1,0 +1,26 @@
+﻿@inherits TextbookListBase
+@page "/Textbooks"
+<MudText Typo="Typo.h4">Textbook List</MudText>
+<MudButton Href="EditTextbook" Variant="Variant.Filled" Color="Color.Primary" OnClick="AddTextbook">Add Textbook</MudButton>
+@foreach (var textbook in Textbooks)
+{
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">@textbook.Name</MudText>
+            </CardHeaderContent>
+            <CardHeaderActions>
+                <MudIconButton Href="@($"/EditTextbook/{textbook.Id}")" Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+            </CardHeaderActions>
+        </MudCardHeader>
+@*        <MudCardContent>
+            <MudText Typo="Typo.body2">@textbook.Summary</MudText>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Text" Color="Color.Primary">@textbook.Units.Count Units</MudButton>
+        </MudCardActions>*@
+    </MudCard>
+}
+
+
+

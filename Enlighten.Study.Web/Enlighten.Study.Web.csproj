@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Common.Web\Common.Web.csproj" />
     <ProjectReference Include="..\Enlighten.Gpt.Client\Enlighten.Gpt.Client.csproj" />
     <ProjectReference Include="..\Enlighten.Study.Core\Enlighten.Study.Core.csproj" />
   </ItemGroup>

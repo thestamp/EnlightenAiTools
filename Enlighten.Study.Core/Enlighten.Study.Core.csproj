@@ -7,8 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Enlighten.Core\Enlighten.Core.csproj" />
     <ProjectReference Include="..\Enlighten.Data\Enlighten.Data.csproj" />
     <ProjectReference Include="..\Enlighten.Gpt.Client\Enlighten.Gpt.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configuration\" />
   </ItemGroup>
 
 </Project>
