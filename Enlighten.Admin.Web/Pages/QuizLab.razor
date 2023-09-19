@@ -1,0 +1,11 @@
+﻿@page "/EditTextbook/{textbookId:int}/EditUnit/{unitId:int}/QuizLab"
+@inherits QuizLabBase
+
+<h3>QuizLab</h3>
+
+<MudExpansionPanels MultiExpansion="true">
+@for (int i = 0; i < 5; i++)
+{
+    <QuizLabThreadComponent SelectedUnit="Unit"></QuizLabThreadComponent>
+}
+</MudExpansionPanels>

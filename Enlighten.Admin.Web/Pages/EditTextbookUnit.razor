@@ -3,7 +3,10 @@
 @inherits EditTextbookUnitBase
 <MudText Typo="Typo.h4">Edit Textbook Unit</MudText>
 
-
+@if (UnitId != null)
+{
+    <MudButton Href="@($"/EditTextbook/{Textbook.Id}/EditUnit/{UnitId}/QuizLab")"  Color="Color.Default" >Quiz Lab</MudButton>
+}
 
 <MudButton OnClick="Save" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
 

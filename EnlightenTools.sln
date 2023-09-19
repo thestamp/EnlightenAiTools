@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enlighten.Admin.Core", "Enl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enlighten.Core", "Enlighten.Core\Enlighten.Core.csproj", "{44147204-080F-40D8-9BA5-354881C5542B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Web", "Common.Web\Common.Web.csproj", "{0C131C8F-7165-463E-A796-1D90F4C800FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Web", "Common.Web\Common.Web.csproj", "{0C131C8F-7165-463E-A796-1D90F4C800FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

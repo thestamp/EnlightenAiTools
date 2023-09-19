@@ -15,7 +15,7 @@ namespace Enlighten.Study.Core.Services
             _clientSettings = clientSettings;
         }
 
-        public async Task<string> GenerateQuestion(GptPromptService.GptPromptRenderModel gptPromptSettings, string textbookContent)
+        public async Task<IAsyncEnumerable<string>> GenerateQuestion(GptPromptService.GptPromptRenderModel gptPromptSettings, string textbookContent)
         {
             var client = new GptClientService(_clientSettings);
 
@@ -25,7 +25,7 @@ namespace Enlighten.Study.Core.Services
             var conversationSettings = InitializeConversation(gptPromptSettings, textbookContent);
 
             // The bot is requested to generate a short-answer question based on the textbook content
-            var response = await client.GetResponse(conversationSettings, gptPromptSettings.QuizQuestionPrompt);
+            var response = await client.StreamResponse(conversationSettings, gptPromptSettings.QuizQuestionPrompt);
             return response;
         }
 

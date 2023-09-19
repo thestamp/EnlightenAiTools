@@ -78,10 +78,19 @@ namespace Enlighten.Study.Web.Pages
 
             var promptSettings = GptPromptService.RenderGptPrompt(SelectedTextbook, SelectedUnit);
 
-            botQuestion = await svc.GenerateQuestion(
+            var response = await svc.GenerateQuestion(
                 promptSettings,
                 "TEXTBOOK SUMMARY: " + SelectedTextbook.Summary 
                 +"UNIT CONTENT: " + SelectedUnit.Content);
+
+            await foreach (var res in response)
+            {
+
+                botQuestion += res;
+
+                StateHasChanged();
+            }
+
             _processing = false;
         }
 
@@ -98,6 +107,7 @@ namespace Enlighten.Study.Web.Pages
                 "TEXTBOOK SUMMARY: " + SelectedTextbook.Summary
                 + "UNIT CONTENT: " + SelectedUnit.Content
                 , botQuestion, userAnswer);
+
             var responseContent = "";
             await foreach (var res in response)
             {
