@@ -19,9 +19,12 @@ builder.Services.AddTransient<TextbookService>();//dbcontext should be injected 
 
 //settings
 var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory()) // Ensures that the app can find the appsettings.json file in the current directory
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables() // Adds environment variables to the configuration
     .AddUserSecrets<Program>()
     .Build();
+
 
 var gptClientSettings = configuration.BindAndAddSingleton<GptClientSettingsModel>(builder.Services, "GptClientSettings");
 var dataSettingsModel = configuration.BindAndAddSingleton<DataSettingsModel>(builder.Services, "DataSettings");

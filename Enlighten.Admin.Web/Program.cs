@@ -27,9 +27,12 @@ builder.Services.AddTransient<TextbookService>();//dbcontext should be injected 
 builder.Services.AddTransient<TextbookAdminService>();//dbcontext should be injected too, since we are using it in the service
 
 var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory()) // Ensures that the app can find the appsettings.json file in the current directory
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables() // Adds environment variables to the configuration
     .AddUserSecrets<Program>()
     .Build();
+
 
 
 var gptClientSettings = configuration.BindAndAddSingleton<GptClientSettingsModel>(builder.Services, "GptClientSettings");
