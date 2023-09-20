@@ -1,11 +1,19 @@
 ﻿@page "/EditTextbook/{textbookId:int}/EditUnit/{unitId:int}/QuizLab"
 @inherits QuizLabBase
 
+
 <h3>QuizLab</h3>
 
+<GptSettingsComponent Settings="Unit"></GptSettingsComponent>
+
+@*<MudButton OnClick="RefreshLabs">Refresh</MudButton>*@
 <MudExpansionPanels MultiExpansion="true">
-@for (int i = 0; i < 5; i++)
-{
-    <QuizLabThreadComponent SelectedUnit="Unit"></QuizLabThreadComponent>
-}
+    @foreach (var lab in LabThreads)
+    {
+        var theLab = lab;
+        <QuizLabThreadComponent @ref="theLab" SelectedUnit="Unit"></QuizLabThreadComponent>
+    }
+
+  
+
 </MudExpansionPanels>

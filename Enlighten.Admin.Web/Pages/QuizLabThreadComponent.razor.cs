@@ -28,12 +28,17 @@ namespace Enlighten.Admin.Web.Pages
         public bool isSomewhatCorrect { get; set; }
 
         public bool _processing = false;
+        private StudyQuizService svc;
 
         protected override async Task OnInitializedAsync()
         {
+            svc = new StudyQuizService(GptClientSettingsModel);
+            await Refresh();
+        }
 
+        public async Task Refresh()
+        {
             _processing = true;
-            var svc = new StudyQuizService(GptClientSettingsModel);
 
             //generate question
             var promptSettings = GptPromptService.RenderGptPrompt(SelectedUnit.Textbook, SelectedUnit);
@@ -54,6 +59,7 @@ namespace Enlighten.Admin.Web.Pages
 
             //Textbooks = await TextbookService.GetTextbooks();
         }
+      
 
 
         public async Task GenerateResponseAnswer()
