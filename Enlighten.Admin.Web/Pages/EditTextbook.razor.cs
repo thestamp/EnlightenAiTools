@@ -85,8 +85,11 @@ namespace Enlighten.Admin.Web.Pages
         }
 
 
-        private async Task PromptSaveBeforeNavigate(string targetUrl)
+        public async Task PromptSaveBeforeNavigate(int? textbookId = null, int? unitId = null)
         {
+            string targetUrl = unitId.HasValue ?
+                $"/EditTextbook/{textbookId}/EditUnit/{unitId}" :
+                $"/EditTextbook/{textbookId}/EditUnit";
             if (true) // Determine if changes were made.
             {
                 bool? result = await DialogService.ShowMessageBox(

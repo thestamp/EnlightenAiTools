@@ -46,8 +46,6 @@ namespace Enlighten.Admin.Web.Pages
 
             await DataContext.SaveChangesAsync();
 
-            Back();
-
         }
 
         public async Task Delete()
