@@ -3,17 +3,20 @@
 
 
 <h3>QuizLab</h3>
-
-<GptSettingsComponent Settings="Unit"></GptSettingsComponent>
-
-@*<MudButton OnClick="RefreshLabs">Refresh</MudButton>*@
 <MudExpansionPanels MultiExpansion="true">
-    @foreach (var lab in LabThreads)
+    <MudExpansionPanel Text="Unit GPT Settings">
+        <GptSettingsComponent Settings="Unit"></GptSettingsComponent>
+    </MudExpansionPanel>
+</MudExpansionPanels>
+<br /><br />
+
+<MudButton OnClick="RefreshLabs">Refresh</MudButton>
+<MudExpansionPanels MultiExpansion="true">
+    @for (int i = 0; i < 5; i++)
     {
-        var theLab = lab;
-        <QuizLabThreadComponent @ref="theLab" SelectedUnit="Unit"></QuizLabThreadComponent>
+        <QuizLabThreadComponent @ref=LabThreadComponents SelectedUnit="Unit"></QuizLabThreadComponent>
     }
 
-  
+
 
 </MudExpansionPanels>

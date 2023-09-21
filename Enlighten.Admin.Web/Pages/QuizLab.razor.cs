@@ -16,31 +16,42 @@ namespace Enlighten.Admin.Web.Pages
         public TextbookUnit Unit { get; set; }
         public Textbook Textbook { get; set; }
 
-        public List<QuizLabThreadComponentBase> LabThreads { get; set; }
+        private List<QuizLabThreadComponent> _labThreadComponents = new List<QuizLabThreadComponent>();
+        public QuizLabThreadComponent LabThreadComponents
+        {
+            get => null; // A getter is required, but not actually used here
+            set => _labThreadComponents.Add(value); // Every time a component is created, it's added to our list
+        }
+
         protected override void OnInitialized()
         {
             Textbook = TextbookService.GetTextbook(TextbookId).Result;
             Unit = Textbook.Units.First(i => i.Id == UnitId);
 
-            LabThreads = new List<QuizLabThreadComponentBase>();
-            for (int i = 0; i < 5; i++)
-            {
-                var lab = new QuizLabThreadComponent
-                {
-                   // SelectedUnit = Unit
-                };
+            //LabThreads = new List<QuizLabThreadComponentBase>();
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    var lab = new QuizLabThreadComponent
+            //    {
+            //       // SelectedUnit = Unit
+            //    };
 
-                LabThreads.Add(lab);
-            }
+            //    LabThreads.Add(lab);
+            //}
 
         }
 
         public async Task RefreshLabs()
         {
-            foreach (var labThread in LabThreads)
+            var tasks = new List<Task>();
+
+            foreach (var labThread in _labThreadComponents)
             {
-                await labThread.Refresh();
+                tasks.Add(labThread.Refresh());
             }
+
+            await Task.WhenAll(tasks);
         }
+
     }
 }

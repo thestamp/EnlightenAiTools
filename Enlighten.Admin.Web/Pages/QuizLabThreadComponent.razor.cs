@@ -39,7 +39,7 @@ namespace Enlighten.Admin.Web.Pages
         public async Task Refresh()
         {
             _processing = true;
-
+            botQuestion = "";
             //generate question
             var promptSettings = GptPromptService.RenderGptPrompt(SelectedUnit.Textbook, SelectedUnit);
             var response = await svc.GenerateQuestion(
