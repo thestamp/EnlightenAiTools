@@ -34,18 +34,18 @@ namespace Enlighten.Admin.Web.Pages
         {
             if (Id == null)
             {
-                TextbookService.AddTextbook(Textbook);
+                await TextbookService.AddTextbook(Textbook);
+                await DataContext.SaveChangesAsync();
+                // After saving, redirect to the edit page with the new ID.
+                NavigationManager.NavigateTo($"/EditTextbook/{Textbook.Id}");
             }
             else
             {
-                TextbookService.UpdateTextbook(Textbook);
+                await TextbookService.UpdateTextbook(Textbook);
+                await DataContext.SaveChangesAsync();
             }
-
-            await DataContext.SaveChangesAsync();
-
-            Back();
-
         }
+
 
         public async Task Delete()
         {
@@ -84,7 +84,30 @@ namespace Enlighten.Admin.Web.Pages
             NavigationManager.NavigateTo("/Textbooks");
         }
 
-        
+
+        private async Task PromptSaveBeforeNavigate(string targetUrl)
+        {
+            if (true) // Determine if changes were made.
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                    "Unsaved Changes",
+                    "You have unsaved changes. Would you like to save before navigating?",
+                    yesText: "Save and Continue", cancelText: "Stay Here");
+
+                if (result == true)
+                {
+                    await Save();
+                    NavigationManager.NavigateTo(targetUrl);
+                }
+            }
+            else
+            {
+                NavigationManager.NavigateTo(targetUrl);
+            }
+        }
+
+
+
 
     }
 }
