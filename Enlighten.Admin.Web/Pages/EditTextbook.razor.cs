@@ -34,14 +34,14 @@ namespace Enlighten.Admin.Web.Pages
         {
             if (Id == null)
             {
-                await TextbookService.AddTextbook(Textbook);
+                TextbookService.AddTextbook(Textbook);
                 await DataContext.SaveChangesAsync();
                 // After saving, redirect to the edit page with the new ID.
                 NavigationManager.NavigateTo($"/EditTextbook/{Textbook.Id}");
             }
             else
             {
-                await TextbookService.UpdateTextbook(Textbook);
+                TextbookService.UpdateTextbook(Textbook);
                 await DataContext.SaveChangesAsync();
             }
         }
@@ -72,7 +72,7 @@ namespace Enlighten.Admin.Web.Pages
 
             if (result ?? false)
             {
-                await TextbookService.DeleteTextbook(Textbook);
+                TextbookService.DeleteTextbook(Textbook);
                 await DataContext.SaveChangesAsync();
 
                 Back();

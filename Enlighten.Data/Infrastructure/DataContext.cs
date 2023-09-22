@@ -25,60 +25,54 @@ namespace Enlighten.Data.Infrastructure
         public DbSet<GptDataSettingsModel> GptDataSettings { get; set; }
 
 
-        public async Task UpdateEntity<T>(T entity) where T : class
-        {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            // Check if the entity is already being tracked
-            var local = Set<T>().Local
-                .FirstOrDefault(entry => entry.Equals(entity));
-
-            // If the entity is found locally (is tracked), then detach it.
-            if (local != null)
-            {
-                Entry(local).State = EntityState.Detached;
-            }
-
-            // Attach the provided entity to the context.
-            Set<T>().Attach(entity);
-
-            // Set the entity's state to Modified.
-            Entry(entity).State = EntityState.Modified;
-
-            // NOTE: This method doesn't call SaveChangesAsync by design.
-            // Remember to call SaveChanges or SaveChangesAsync separately.
-        }
-
-        public async Task AddEntity<T>(T entity) where T : class
+        public void AddEntity<T>(T entity) where T : class
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
 
             Set<T>().Add(entity);
-
-            // NOTE: This method doesn't call SaveChangesAsync by design.
-            // Remember to call SaveChanges or SaveChangesAsync separately.
         }
 
-        public async Task DeleteEntity<T>(T entity) where T : class
+        public void UpdateEntity<T>(T entity) where T : class
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
 
-            var local = Set<T>().Local.FirstOrDefault(entry => entry.Equals(entity));
+            Set<T>().Attach(entity);
+            Entry(entity).State = EntityState.Modified;
+        }
 
-            // If the entity is not tracked locally, attach it
-            if (local == null)
-            {
-                Set<T>().Attach(entity);
-            }
+        public void DeleteEntity<T>(T entity) where T : class
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
 
             Set<T>().Remove(entity);
-
-            // NOTE: This method doesn't call SaveChangesAsync by design.
-            // Remember to call SaveChanges or SaveChangesAsync separately.
         }
+
+        public override int SaveChanges()
+        {
+            var result = base.SaveChanges();
+            Reset();  // or Clear(), Complete(), FinalizeUoW(), or whatever name you chose
+            return result;
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var result = await base.SaveChangesAsync(cancellationToken);
+            Reset();  // or Clear(), Complete(), FinalizeUoW(), or whatever name you chose
+            return result;
+        }
+
+        public void Reset()
+        {
+            var entries = ChangeTracker.Entries().ToList();
+            foreach (var entry in entries)
+            {
+                entry.State = EntityState.Detached;
+            }
+        }
+
 
     }
 }

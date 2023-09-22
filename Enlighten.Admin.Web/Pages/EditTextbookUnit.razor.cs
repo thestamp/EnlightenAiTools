@@ -37,11 +37,11 @@ namespace Enlighten.Admin.Web.Pages
         {
             if (UnitId == null)
             {
-                await TextbookService.AddTextbookUnit(Textbook, Unit);
+                TextbookService.AddTextbookUnit(Textbook, Unit);
             }
             else
             {
-                await TextbookService.UpdateTextbookUnit(Unit);
+                TextbookService.UpdateTextbookUnit(Unit);
             }
 
             await DataContext.SaveChangesAsync();
@@ -58,7 +58,7 @@ namespace Enlighten.Admin.Web.Pages
 
             if (result ?? false)
             {
-                await TextbookService.DeleteTextbookUnit(Unit);
+                TextbookService.DeleteTextbookUnit(Unit);
                 await DataContext.SaveChangesAsync();
 
                 Back();

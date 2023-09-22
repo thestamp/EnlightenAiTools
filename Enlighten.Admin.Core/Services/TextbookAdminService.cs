@@ -28,21 +28,21 @@ namespace Enlighten.Admin.Core.Services
             };
         }
 
-        public async Task AddTextbook(Textbook textbook)
+        public void AddTextbook(Textbook textbook)
         {
-            await _context.AddEntity(textbook);
+            _context.AddEntity(textbook);
         }
 
-        public async Task UpdateTextbook(Textbook textbook)
+        public void UpdateTextbook(Textbook textbook)
         {
-            await _context.UpdateEntity(textbook);
+            _context.UpdateEntity(textbook);
         }
 
 
-        public async Task DeleteTextbook(Textbook textbook)
+        public void DeleteTextbook(Textbook textbook)
         {
             _context.Attach(textbook);
-            await _context.DeleteEntity(textbook);
+            _context.DeleteEntity(textbook);
         }
 
         public TextbookUnit CreateTextbookUnit()
@@ -50,23 +50,23 @@ namespace Enlighten.Admin.Core.Services
             return new TextbookUnit();
         }
 
-        public async Task AddTextbookUnit(Textbook textbook, TextbookUnit unit)
+        public void AddTextbookUnit(Textbook textbook, TextbookUnit unit)
         {
             unit.Textbook = textbook;
             textbook.Units.Add(unit);
-            await _context.UpdateEntity(textbook);
-            await _context.AddEntity(unit);
+            _context.UpdateEntity(textbook);
+            _context.AddEntity(unit);
         }
 
-        public async Task UpdateTextbookUnit(TextbookUnit unit)
+        public void UpdateTextbookUnit(TextbookUnit unit)
         {
-            await _context.UpdateEntity(unit);
+            _context.UpdateEntity(unit);
         }
 
-        public async Task DeleteTextbookUnit(TextbookUnit unit)
+        public void DeleteTextbookUnit(TextbookUnit unit)
         {
             unit.Textbook.Units.Remove(unit);
-            await _context.DeleteEntity(unit);
+            _context.DeleteEntity(unit);
 
         }
 
