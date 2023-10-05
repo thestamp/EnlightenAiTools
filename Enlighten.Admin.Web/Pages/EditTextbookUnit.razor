@@ -3,6 +3,10 @@
 @inherits EditTextbookUnitBase
 
 <MudText Typo="Typo.h4">Edit Textbook Unit</MudText>
+@if (UnitId.HasValue)
+{
+    <MudButton Href="@($"/EditTextbook/{Textbook.Id}/EditUnit/{UnitId}/QuizLab")" Variant="Variant.Filled" Color="Color.Default">Save and go to Quiz Lab</MudButton>
+}
 
 <div class="my-4">
     <MudTextField T="string" Label="Name" @bind-Value="Unit.Name" Variant="Variant.Outlined" Lines="3" />
@@ -16,10 +20,7 @@
 </div>
 
 <div class="mt-4">
-    @if (UnitId.HasValue)
-    {
-        <MudButton Href="@($"/EditTextbook/{Textbook.Id}/EditUnit/{UnitId}/QuizLab")" Color="Color.Default">Save and go to Quiz Lab</MudButton>
-    }
+   
     <MudButton OnClick="Save" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
     <MudButton OnClick="Back" Variant="Variant.Filled" Color="Color.Error">Back</MudButton>
     @if (UnitId.HasValue)

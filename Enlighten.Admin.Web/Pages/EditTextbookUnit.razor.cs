@@ -38,13 +38,16 @@ namespace Enlighten.Admin.Web.Pages
             if (UnitId == null)
             {
                 TextbookService.AddTextbookUnit(Textbook, Unit);
+                await DataContext.SaveChangesAsync();
+                NavigationManager.NavigateTo($"/EditTextbook/{Textbook.Id}/EditUnit/{Unit.Id}");
             }
             else
             {
                 TextbookService.UpdateTextbookUnit(Unit);
+                await DataContext.SaveChangesAsync();
             }
 
-            await DataContext.SaveChangesAsync();
+            
 
         }
 

@@ -92,10 +92,11 @@ namespace Enlighten.Admin.Web.Pages
                 $"/EditTextbook/{textbookId}/EditUnit";
             if (true) // Determine if changes were made.
             {
-                bool? result = await DialogService.ShowMessageBox(
-                    "Unsaved Changes",
-                    "You have unsaved changes. Would you like to save before navigating?",
-                    yesText: "Save and Continue", cancelText: "Stay Here");
+                var result = true;
+                //bool? result = await DialogService.ShowMessageBox(
+                //    "Unsaved Changes",
+                //    "You have unsaved changes. Would you like to save before navigating?",
+                //    yesText: "Save and Continue", cancelText: "Stay Here");
 
                 if (result == true)
                 {

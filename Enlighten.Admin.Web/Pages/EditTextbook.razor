@@ -10,7 +10,7 @@
 @if (Id != null)
 {
     <MudText Typo="Typo.h5">Textbook Units</MudText>
-    <MudButton OnClick="() => PromptSaveBeforeNavigate(Textbook.Id)" Color="Color.Primary">Add Unit</MudButton>
+    <MudButton OnClick="() => PromptSaveBeforeNavigate(Textbook.Id)" Variant="Variant.Filled"  Color="Color.Primary">Add Unit</MudButton>
 
 
 
@@ -24,6 +24,7 @@
                 </CardHeaderContent>
                 <CardHeaderActions>
                     <MudIconButton @onclick="() => PromptSaveBeforeNavigate(Textbook.Id, unit.Id)" Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+                    <MudButton Href="@($"/EditTextbook/{Textbook.Id}/EditUnit/{unit.Id}/QuizLab")" Variant="Variant.Filled" Color="Color.Default">Quiz Lab</MudButton>
                 </CardHeaderActions>
             </MudCardHeader>
             <MudCardContent>
