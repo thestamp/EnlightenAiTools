@@ -73,6 +73,25 @@ namespace Enlighten.Core.Services
                 }
             }
 
+            foreach (var gptPromptModel in gptPromptModels)
+            {
+                if (gptPromptModel is TextbookUnit)
+                {
+                    var unit = (TextbookUnit)gptPromptModel;
+
+                    if (unit.TopicList.Contains(','))
+                    {
+                        var topicList = unit.TopicList.Split(',');
+                        var rnd = new Random();
+
+                        var randomTopicIndex = rnd.NextInt64(0, topicList.Length);
+
+                        result.QuizQuestionPrompt = result.QuizQuestionPrompt?.Replace("{topic}", topicList[randomTopicIndex]);
+                    }
+
+                }
+            }
+            
             return result;
         }
     }
