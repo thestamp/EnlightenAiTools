@@ -59,8 +59,9 @@ namespace Enlighten.Study.Web.Pages
 
         public async Task GenerateQuestion()
         {
-       
+
             //reset some things
+            botQuestion = "";
             userAnswer = "";
             botAnswerResponse = "";
             hasAnswer = false;
