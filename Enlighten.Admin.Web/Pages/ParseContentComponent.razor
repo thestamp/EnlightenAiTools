@@ -1,0 +1,10 @@
+﻿@inherits ParseContentComponentBase
+@page "/parse"
+
+<h3>ParseContentComponent</h3>
+
+<button type="button" class="btn btn-primary px-4 gap-3"><InputFile OnChange="@LoadFile" /></button>
+
+<MudText>@ViewSummary</MudText>
+<MudText>@ViewTopics</MudText>
+<MudText>@ViewContent</MudText>
