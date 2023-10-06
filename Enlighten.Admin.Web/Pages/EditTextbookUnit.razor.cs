@@ -51,6 +51,15 @@ namespace Enlighten.Admin.Web.Pages
 
         }
 
+        public async Task SaveQuizLab()
+        {
+            TextbookService.UpdateTextbookUnit(Unit);
+            await DataContext.SaveChangesAsync();
+            NavigationManager.NavigateTo($"/EditTextbook/{Textbook.Id}/EditUnit/{UnitId}/QuizLab");
+
+        }
+
+
         public async Task Delete()
         {
 

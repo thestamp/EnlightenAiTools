@@ -25,7 +25,7 @@ namespace Enlighten.Study.Core.Services
 
             // The bot is requested to generate a short-answer question based on the textbook content
             var response = await client.StreamResponse(conversationSettings,
-                "From the provided textbook content, extract and return a structured json format, breaking down the content into topics with summaries, subtopics with summaries, and other important details to be used as a knowledge reference for generating questions. Be sure to include the relevant section numbers.");
+                "From the provided textbook content, extract and return a structured json format breaking down each and every topic and subtopic with summaries, and other important details to be used as a knowledge reference for generating questions. Be sure to include the relevant section numbers. Only inclde the JSON in the response.");
             return response;
         }
 
@@ -54,7 +54,21 @@ namespace Enlighten.Study.Core.Services
 
             // The bot is requested to generate a short-answer question based on the textbook content
             var response = await client.StreamResponse(conversationSettings,
-                "From the provided textbook content, generate a topic list in a comma-delimited format");
+                "From the provided textbook content, generate a complete topic list in a comma-delimited format");
+            return response;
+        }
+
+        public async Task<IAsyncEnumerable<string>> GetName(GptPromptService.GptPromptRenderModel gptPromptSettings, string textbookContent)
+        {
+            var client = new GptClientService(_clientSettings);
+
+            client.Connect();
+
+            var conversationSettings = InitializeConversation(gptPromptSettings, textbookContent);
+
+            // The bot is requested to generate a short-answer question based on the textbook content
+            var response = await client.StreamResponse(conversationSettings,
+                "From the provided textbook content, generate a title ");
             return response;
         }
 

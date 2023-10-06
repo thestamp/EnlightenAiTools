@@ -13,21 +13,10 @@ namespace Enlighten.Admin.Web.Pages
         [Inject] public GptClientSettingsModel GptClientSettingsModel { get; set; }
         [Inject] public GptPromptService GptPromptService { get; set; }
         [Parameter]
-        public string ResultContent { get; set; }
-        [Parameter]
-        public string ResultSummary { get; set; }
-        [Parameter]
-        public string ResultTopicList { get; set; }
-
-  
-
-        public string ViewContent = string.Empty;
-        public string ViewSummary = string.Empty;
-        public string ViewTopics = string.Empty;
-        
+        public TextbookUnit Unit { get; set; }
 
         public string errorMessage = string.Empty;
-        private bool _processing;
+        public bool _processing;
         private StudyContentService svc;
 
         protected override async Task OnInitializedAsync()
@@ -36,13 +25,18 @@ namespace Enlighten.Admin.Web.Pages
 
         }
 
-        public async Task LoadFile(InputFileChangeEventArgs e)
+        public async Task LoadFile(IBrowserFile file)
         {
-
+            _processing = true;
             errorMessage = string.Empty;
 
+            Unit.Content = "";
+            Unit.Name = "";
+            Unit.TopicList = "";
+            Unit.Summary = "";
+
             using var stream = new MemoryStream();
-            await e.File.OpenReadStream().CopyToAsync(stream);
+            await file.OpenReadStream().CopyToAsync(stream);
 
             //make it delimited
             stream.Position = 0;
@@ -52,8 +46,10 @@ namespace Enlighten.Admin.Web.Pages
             try
             {
                 await GetStructuredContent(contentString);
-                await GetSummary(ViewContent);
-                await GetTopicList(ViewContent);
+                await GetName(Unit.Content);
+                await GetSummary(Unit.Content);
+                await GetTopicList(Unit.Content);
+                
 
             }
             catch (Exception exception)
@@ -62,12 +58,14 @@ namespace Enlighten.Admin.Web.Pages
                 throw;
             }
 
+            _processing = false;
+
         }
 
 
         public async Task GetStructuredContent(string content)
         {
-            ViewContent = "";
+            Unit.Content = "";
             //generate question
             var promptSettings = GptPromptService.RenderGptPrompt(); //basics only
             var response = await svc.GetStructuredContent(promptSettings, "UNIT CONTENT: " + content);
@@ -75,7 +73,8 @@ namespace Enlighten.Admin.Web.Pages
             await foreach (var res in response)
             {
 
-                ViewContent += res;
+                Unit.Content += res;
+
 
                 StateHasChanged();
             }
@@ -83,7 +82,7 @@ namespace Enlighten.Admin.Web.Pages
 
         public async Task GetSummary(string content)
         {
-            ViewSummary = "";
+            Unit.Summary = "";
             //generate question
             var promptSettings = GptPromptService.RenderGptPrompt(); //basics only
             var response = await svc.GetSummary(promptSettings, "UNIT CONTENT: " + content);
@@ -91,7 +90,7 @@ namespace Enlighten.Admin.Web.Pages
             await foreach (var res in response)
             {
 
-                ViewSummary += res;
+                Unit.Summary += res;
 
                 StateHasChanged();
             }
@@ -99,7 +98,7 @@ namespace Enlighten.Admin.Web.Pages
 
         public async Task GetTopicList(string content)
         {
-            ViewTopics = "";
+            Unit.TopicList = "";
             //generate question
             var promptSettings = GptPromptService.RenderGptPrompt(); //basics only
             var response = await svc.GetTopicList(promptSettings, "UNIT CONTENT: " + content);
@@ -107,7 +106,23 @@ namespace Enlighten.Admin.Web.Pages
             await foreach (var res in response)
             {
 
-                ViewTopics += res;
+                Unit.TopicList += res;
+
+                StateHasChanged();
+            }
+        }
+
+        public async Task GetName(string content)
+        {
+            Unit.Name = "";
+            //generate question
+            var promptSettings = GptPromptService.RenderGptPrompt(); //basics only
+            var response = await svc.GetName(promptSettings, "UNIT CONTENT: " + content);
+
+            await foreach (var res in response)
+            {
+
+                Unit.Name += res;
 
                 StateHasChanged();
             }

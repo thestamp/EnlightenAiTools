@@ -1,10 +1,24 @@
 ﻿@inherits ParseContentComponentBase
 @page "/parse"
 
-<h3>ParseContentComponent</h3>
-
-<button type="button" class="btn btn-primary px-4 gap-3"><InputFile OnChange="@LoadFile" /></button>
-
-<MudText>@ViewSummary</MudText>
-<MudText>@ViewTopics</MudText>
-<MudText>@ViewContent</MudText>
+<MudFileUpload T="IBrowserFile" Accept=".txt" FilesChanged="LoadFile">
+    <ButtonTemplate>
+        <MudButton HtmlTag="label"
+                   Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.CloudUpload"
+                   for="@context">
+            Upload Content Text File
+        </MudButton>
+    </ButtonTemplate>
+</MudFileUpload>
+* Note: Uploaded content is not stored in Enlighten Tools, but is uploaded to OpenAI ChatGPT <MudLink href="https://openai.com/policies/privacy-policy" target="_blank">(OpenAI Privacy Policy)</MudLink>
+@if (_processing)
+{
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"></MudProgressLinear>
+}
+    
+<MudTextField T="string" Label="Name" @bind-Value="Unit.Name" Variant="Variant.Outlined" Lines="1" />
+<MudTextField T="string" Label="Summary" @bind-Value="Unit.Summary" Variant="Variant.Outlined" Lines="3" />
+<MudTextField T="string" Label="Topic List (Comma delimited)" @bind-Value="Unit.TopicList" Variant="Variant.Outlined" Lines="1"/>
+<MudTextField T="string" Label="Content" @bind-Value="Unit.Content" Variant="Variant.Outlined" Lines="5"/>
