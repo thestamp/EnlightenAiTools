@@ -55,7 +55,7 @@
                 <MudCardContent>
                     <MudMarkdown Value="@botQuestion"/>
 
-                <MudTextField @ref="txtAnswer" @bind-Value="@userAnswer" Label="Your Answer" Multiline="true" Rows="2" Variant="Variant.Outlined" Class="mt-4" Disabled="_processing"  OnKeyDown="OnKeyDown" />
+                <MudTextField Immediate="true" @ref="txtAnswer" @bind-Value="@userAnswer" Label="Your Answer" Multiline="true" Rows="2" Variant="Variant.Outlined" Class="mt-4" Disabled="_processing"  OnKeyDown="OnKeyDown" />
 
                 </MudCardContent>
                 <MudCardActions>

@@ -98,6 +98,7 @@ namespace Enlighten.Study.Web.Pages
             _processing = false;
 
             await txtAnswer.FocusAsync();
+            await txtAnswer.SelectAsync();
         }
 
         public async Task GenerateResponseAnswer()
