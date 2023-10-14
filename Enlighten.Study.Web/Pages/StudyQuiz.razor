@@ -53,10 +53,9 @@
 
             <MudCard>
                 <MudCardContent>
-                    <MudText>@SelectedUnit?.Name Question!</MudText>
                     <MudMarkdown Value="@botQuestion"/>
 
-                <MudTextField @ref="txtAnswer" @bind-Value="@userAnswer" Label="Your Answer" Multiline="true" Rows="2" Variant="Variant.Outlined" Class="mt-4" Disabled="_processing" />
+                <MudTextField @ref="txtAnswer" @bind-Value="@userAnswer" Label="Your Answer" Multiline="true" Rows="2" Variant="Variant.Outlined" Class="mt-4" Disabled="_processing"  OnKeyDown="OnKeyDown" />
 
                 </MudCardContent>
                 <MudCardActions>
@@ -86,7 +85,7 @@
                 {
                     <MudAlert Severity="Severity.Success">@botAnswerResponse</MudAlert>
 
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GenerateQuestion" Class="mt-4" Disabled="SelectedUnit == null && !IsRandomUnit">
+                <MudButton @ref="NextQuestionButton" Variant="Variant.Filled" Color="Color.Success" OnClick="GenerateQuestion" Class="mt-4" Disabled="SelectedUnit == null && !IsRandomUnit">
                         @if (_processing)
                         {
                             <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
@@ -94,7 +93,7 @@
                         }
                         else
                         {
-                            <MudText>Next Question</MudText>
+                            <MudText>Press Enter for Next Question</MudText>
                         }
 
                     </MudButton>

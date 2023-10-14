@@ -4,6 +4,7 @@ using Enlighten.Data.Models.Configuration;
 using Enlighten.Gpt.Client.Configuration;
 using Enlighten.Study.Core.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 
 namespace Enlighten.Study.Web.Pages
@@ -18,6 +19,8 @@ namespace Enlighten.Study.Web.Pages
         [Inject] public GptPromptService GptPromptService { get; set; }
 
         public MudTextField<string> txtAnswer { get; set; }
+
+        public MudButton NextQuestionButton { get; set; }
         public bool hasAnswer { get; set; }
         public bool isCorrect { get; set; }
         public bool isSomewhatCorrect { get; set; }
@@ -93,6 +96,8 @@ namespace Enlighten.Study.Web.Pages
             }
 
             _processing = false;
+
+            await txtAnswer.FocusAsync();
         }
 
         public async Task GenerateResponseAnswer()
@@ -128,7 +133,33 @@ namespace Enlighten.Study.Web.Pages
             }
 
             _processing = false;
+
+            StateHasChanged();
+
+            if (isCorrect)
+            {
+                //focus on next question button
+                await NextQuestionButton.FocusAsync();
+            }
+            else
+            {
+                //highlight text to try again
+                await txtAnswer.FocusAsync();
+                await txtAnswer.SelectAsync();
+                //
+            }
+            
            
+        }
+
+
+        public async void OnKeyDown(KeyboardEventArgs args)
+        {
+            if (args.Key == "Enter")
+            {
+                await GenerateResponseAnswer();
+                StateHasChanged();
+            }
         }
     }
 }
