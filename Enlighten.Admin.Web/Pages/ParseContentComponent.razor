@@ -1,29 +1,52 @@
 ﻿@inherits ParseContentComponentBase
 @page "/parse"
 
+
 <MudFileUpload T="IBrowserFile" Accept=".txt" FilesChanged="LoadFile">
     <ButtonTemplate>
-        <MudButton HtmlTag="label"
-                   Variant="Variant.Filled"
-                   Color="Color.Primary"
-                   StartIcon="@Icons.Material.Filled.CloudUpload"
-                   for="@context">
+        <MudButton 
+            Size="Size.Small"
+            HtmlTag="label"
+            Variant="Variant.Filled"
+            Color="Color.Primary"
+            StartIcon="@Icons.Material.Filled.CloudUpload"
+            for="@context">
             Upload Content Text File
         </MudButton>
     </ButtonTemplate>
 </MudFileUpload>
 * Note: Uploaded content is not stored in Enlighten Tools, but is uploaded to OpenAI ChatGPT <MudLink href="https://openai.com/policies/privacy-policy" target="_blank">(OpenAI Privacy Policy)</MudLink>
-@if (_processing)
+
+<MudDivider />
+<MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Default" OnClick="GetName" StartIcon="@Icons.Material.Filled.AutoAwesome">Generate Name</MudButton>
+@if (_processingName)
 {
     <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"></MudProgressLinear>
 }
-    
-<MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Default" OnClick="GetName">Generate Name</MudButton>
-
 <MudTextField T="string" Label="Name" @bind-Value="Unit.Name" Variant="Variant.Outlined" Lines="1" />
-<MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Default" OnClick="GetSummary">Generate Summary</MudButton>
 
+<MudDivider />
+<MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Default" OnClick="GetSummary" StartIcon="@Icons.Material.Filled.AutoAwesome">Generate Summary</MudButton>
+@if (_processingSummary)
+{
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"></MudProgressLinear>
+}
 <MudTextField T="string" Label="Summary" @bind-Value="Unit.Summary" Variant="Variant.Outlined" Lines="3" />
-<MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Default" OnClick="GetTopicList">Generate Topic List</MudButton>
+
+<MudDivider />
+<MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Default" OnClick="GetTopicList" StartIcon="@Icons.Material.Filled.AutoAwesome">Generate Topic List</MudButton>
+@if (_processingTopicList)
+{
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"></MudProgressLinear>
+}
+
 <MudTextField T="string" Label="Topic List (Comma delimited)" @bind-Value="Unit.TopicList" Variant="Variant.Outlined" Lines="1" />
-<MudTextField T="string" Label="Content" @bind-Value="Unit.Content" Variant="Variant.Outlined" Lines="5"/>
+
+<MudDivider />
+<MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Default" OnClick="GetContent" StartIcon="@Icons.Material.Filled.AutoAwesome">Re-Generate Content</MudButton>
+
+@if (_processingContent)
+{
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"></MudProgressLinear>
+}
+<MudTextField T="string" Label="Content" @bind-Value="Unit.Content" Variant="Variant.Outlined" Lines="5" />
