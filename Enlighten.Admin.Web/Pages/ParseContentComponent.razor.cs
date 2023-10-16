@@ -63,12 +63,12 @@ namespace Enlighten.Admin.Web.Pages
         }
 
 
-        public async Task GetStructuredContent()
+        public async Task GetStructuredContent(string content)
         {
             Unit.Content = "";
             //generate question
             var promptSettings = GptPromptService.RenderGptPrompt(); //basics only
-            var response = await svc.GetStructuredContent(promptSettings, "UNIT CONTENT: " + Unit.Content);
+            var response = await svc.GetStructuredContent(promptSettings, "UNIT CONTENT: " + content);
 
             await foreach (var res in response)
             {
