@@ -46,9 +46,9 @@ namespace Enlighten.Admin.Web.Pages
             try
             {
                 await GetStructuredContent(contentString);
-                await GetName(Unit.Content);
-                await GetSummary(Unit.Content);
-                await GetTopicList(Unit.Content);
+                await GetName();
+                await GetSummary();
+                await GetTopicList();
                 
 
             }
@@ -63,12 +63,12 @@ namespace Enlighten.Admin.Web.Pages
         }
 
 
-        public async Task GetStructuredContent(string content)
+        public async Task GetStructuredContent()
         {
             Unit.Content = "";
             //generate question
             var promptSettings = GptPromptService.RenderGptPrompt(); //basics only
-            var response = await svc.GetStructuredContent(promptSettings, "UNIT CONTENT: " + content);
+            var response = await svc.GetStructuredContent(promptSettings, "UNIT CONTENT: " + Unit.Content);
 
             await foreach (var res in response)
             {
@@ -80,12 +80,12 @@ namespace Enlighten.Admin.Web.Pages
             }
         }
 
-        public async Task GetSummary(string content)
+        public async Task GetSummary()
         {
             Unit.Summary = "";
             //generate question
             var promptSettings = GptPromptService.RenderGptPrompt(); //basics only
-            var response = await svc.GetSummary(promptSettings, "UNIT CONTENT: " + content);
+            var response = await svc.GetSummary(promptSettings, "UNIT CONTENT: " + Unit.Content);
 
             await foreach (var res in response)
             {
@@ -96,12 +96,12 @@ namespace Enlighten.Admin.Web.Pages
             }
         }
 
-        public async Task GetTopicList(string content)
+        public async Task GetTopicList()
         {
             Unit.TopicList = "";
             //generate question
             var promptSettings = GptPromptService.RenderGptPrompt(); //basics only
-            var response = await svc.GetTopicList(promptSettings, "UNIT CONTENT: " + content);
+            var response = await svc.GetTopicList(promptSettings, "UNIT CONTENT: " + Unit.Content);
 
             await foreach (var res in response)
             {
@@ -112,12 +112,12 @@ namespace Enlighten.Admin.Web.Pages
             }
         }
 
-        public async Task GetName(string content)
+        public async Task GetName()
         {
             Unit.Name = "";
             //generate question
             var promptSettings = GptPromptService.RenderGptPrompt(); //basics only
-            var response = await svc.GetName(promptSettings, "UNIT CONTENT: " + content);
+            var response = await svc.GetName(promptSettings, "UNIT CONTENT: " + Unit.Content);
 
             await foreach (var res in response)
             {

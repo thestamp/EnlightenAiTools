@@ -18,7 +18,12 @@
     <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"></MudProgressLinear>
 }
     
+<MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="GetName">Generate Name</MudButton>
+
 <MudTextField T="string" Label="Name" @bind-Value="Unit.Name" Variant="Variant.Outlined" Lines="1" />
+<MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="GetSummary">Generate Summary</MudButton>
+
 <MudTextField T="string" Label="Summary" @bind-Value="Unit.Summary" Variant="Variant.Outlined" Lines="3" />
-<MudTextField T="string" Label="Topic List (Comma delimited)" @bind-Value="Unit.TopicList" Variant="Variant.Outlined" Lines="1"/>
+<MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="GetTopicList">Generate Topic List</MudButton>
+<MudTextField T="string" Label="Topic List (Comma delimited)" @bind-Value="Unit.TopicList" Variant="Variant.Outlined" Lines="1" />
 <MudTextField T="string" Label="Content" @bind-Value="Unit.Content" Variant="Variant.Outlined" Lines="5"/>
