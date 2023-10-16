@@ -97,8 +97,9 @@ namespace Enlighten.Study.Web.Pages
 
             _processing = false;
 
+            await txtAnswer.Clear();
             await txtAnswer.FocusAsync();
-            await txtAnswer.SelectAsync();
+            StateHasChanged();
         }
 
         public async Task GenerateResponseAnswer()
