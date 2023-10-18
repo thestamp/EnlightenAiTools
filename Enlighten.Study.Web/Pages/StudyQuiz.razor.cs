@@ -37,9 +37,17 @@ namespace Enlighten.Study.Web.Pages
 
         public bool IsRandomUnit { get; set; }
 
+        public List<StudyTopicTrackerService> TopicTrackerServiceList { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             Textbooks = await TextbookService.GetTextbooks();
+
+            TopicTrackerServiceList = new List<StudyTopicTrackerService>();
+            foreach (var textbook in Textbooks)
+            {
+                TopicTrackerServiceList.Add(new StudyTopicTrackerService(textbook));
+            }
         }
 
         //public async Task RefreshUnits(ChangeEventArgs e)
@@ -59,7 +67,6 @@ namespace Enlighten.Study.Web.Pages
         //         await GenerateResponseAnswer();
         //    }
         //}
-
         public async Task GenerateQuestion()
         {
 
