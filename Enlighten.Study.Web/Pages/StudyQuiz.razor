@@ -31,7 +31,7 @@
 
         <MudCheckBox T="bool" Label="Random Unit" @bind-Checked="@IsRandomUnit"></MudCheckBox>
 
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GenerateQuestion" Class="mt-4" Disabled="SelectedTextbook == null || (SelectedUnit == null && !IsRandomUnit)">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => GenerateQuestion()" Class="mt-4" Disabled="SelectedTextbook == null || (SelectedUnit == null && !IsRandomUnit)" StartIcon="@Icons.Material.Outlined.Quiz">
             @if (_processing)
             {
                 <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
@@ -86,7 +86,7 @@
             {
                 <MudAlert Severity="Severity.Success">@botAnswerResponse</MudAlert>
 
-            <MudButton @ref="NextQuestionButton" Variant="Variant.Filled" Color="Color.Success" OnClick="GenerateQuestion" Class="mt-4" Disabled="SelectedUnit == null && !IsRandomUnit">
+                <MudButton @ref="NextQuestionButton" Variant="Variant.Filled" Color="Color.Success" OnClick="() => GenerateQuestion()" Class="mt-4" Disabled="SelectedUnit == null && !IsRandomUnit" StartIcon="@Icons.Material.Outlined.Quiz">
                     @if (_processing)
                     {
                         <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
@@ -125,12 +125,23 @@
                 <MudExpansionPanel Text="@i.Name" IsInitiallyExpanded="true">
                     @{
                         var topics = TopicTrackerServiceList[SelectedTextbook].TrackerUnits.First(j => j.Unit == i).Topics.ToList();
-                        var countAttempted = @topics.Count(i => i.AttemptResults.Any());
-                        var countTotal = @topics.Count;
-                        var progressValue = ((double)countAttempted / countTotal) * 100;
+                        var countAttempted = topics.Count(i => i.AttemptResults.Any());
+                        var countTotal = topics.Count;
+                        var countIncorrect = topics.Count(i => i.AttemptResults.Any() 
+                                                                && i.AttemptResults.Count(i => i) / i.AttemptResults.Count() < 0.5);
                     }
-                    @countAttempted out of @countTotal topics attempted
-                    <MudProgressLinear Color="Color.Tertiary" Size="Size.Large" Value="@progressValue" />
+                    <MudText Inline="true">
+                        @countAttempted out of @countTotal topics attempted
+                    </MudText>
+                    @if (countAttempted > 0)
+                    {
+                        <MudText Inline="true"> <i>(@countIncorrect incorrect)</i></MudText>
+                    }
+                    
+                    <MudProgressLinear Color="Color.Tertiary" Size="Size.Large" Min="0" Max="@countTotal" Value="@countAttempted" />
+                    <br>
+                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => GenerateQuestion(i)" StartIcon="@Icons.Material.Outlined.Quiz">Generate Random Topic Question
+            </MudButton>
 
                     <br><br>
                     <MudGrid Spacing="1">
@@ -139,19 +150,32 @@
                             var hasAttempted = topic.AttemptResults.Any();
                             var isPass = hasAttempted
                                          && ((double)topic.AttemptResults.Count(k => k) / topic.AttemptResults.Count >= 0.5);
+                            var noIcon = true;
+                            Severity severity;
+                            
+                          
+                            if (hasAttempted && isPass)
+                            {
+                                noIcon = false;
+                                severity = Severity.Success;
+                            }
+                            else if (hasAttempted && !isPass)
+                            {
+                                noIcon = false;
+                                severity = Severity.Error;
+                            }
+                            else if (SelectedTopic == topic.Topic)
+                            {
+                                severity = Severity.Info;
+                            } 
+                            else
+                            {
+                                severity = Severity.Normal;
+                            }
                             <MudItem xs="12" sm="6">
-                                @if (!hasAttempted)
-                                {
-                                    <MudAlert Severity="Severity.Info" Dense="true"> @topic.Topic</MudAlert>
-                                }
-                                else if (isPass)
-                                {
-                                    <MudAlert Severity="Severity.Success" Dense="true"> @topic.Topic</MudAlert>
-                                }
-                                else
-                                {
-                                    <MudAlert Severity="Severity.Error" Dense="true"> @topic.Topic</MudAlert>
-                                }
+                                <MudAlert Severity="@severity" Dense="true" NoIcon="@noIcon">
+                                    <MudIconButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" Icon="@Icons.Material.Outlined.Quiz" OnClick="() => GenerateQuestion(i, topic.Topic)"></MudIconButton>
+                                    @topic.Topic </MudAlert>
 
                             </MudItem>
                         }
