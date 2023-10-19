@@ -1,6 +1,7 @@
 ﻿@page "/quiz"
 
 @using Enlighten.Data.Models
+@using Enlighten.Study.Core.Services
 @inherits StudyQuizBase
 
 <MudText Typo="Typo.h3" GutterBottom="true">Quiz</MudText>
@@ -9,7 +10,7 @@
 <MudContainer>
     <MudPaper Elevation="2" Rounded="true" Class="p-4 my-4">
         
-        <MudSelect T="Textbook" Label="Select Textbook" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedTextbook" >
+        <MudSelect T="Textbook" Label="Select Textbook" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedTextbook" SelectedValuesChanged="RefreshUnits">
             @foreach (var item in Textbooks)
             {
                 <MudSelectItem Value="@item">@item.Name</MudSelectItem>
@@ -49,69 +50,91 @@
     <br /><br />
         
     @if (!string.IsNullOrEmpty(botQuestion))
-        {
+    {
 
-            <MudCard>
-                <MudCardContent>
-                    <MudMarkdown Value="@botQuestion"/>
+        <MudCard>
+            <MudCardContent>
+                <MudMarkdown Value="@botQuestion"/>
 
-                <MudTextField Immediate="true" @ref="txtAnswer" @bind-Value="@userAnswer" Label="Your Answer" Multiline="true" Rows="2" Variant="Variant.Outlined" Class="mt-4" Disabled="_processing"  OnKeyDown="OnKeyDown" />
+            <MudTextField Immediate="true" @ref="txtAnswer" @bind-Value="@userAnswer" Label="Your Answer" Multiline="true" Rows="2" Variant="Variant.Outlined" Class="mt-4" Disabled="_processing"  OnKeyDown="OnKeyDown" />
 
-                </MudCardContent>
-                <MudCardActions>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GenerateResponseAnswer" Class="mt-4" >
-                        @if (_processing)
-                        {
-                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                            <MudText Class="ms-2">Processing</MudText>
-                        }
-                        else
-                        {
-                            <MudText>Submit Answer</MudText>
-                        }
-
-                    </MudButton>
-                </MudCardActions>
-            </MudCard>
-
-
-            
-            
-            <br><br />
-        
-            @if (hasAnswer)
-            {
-                if (isCorrect)
-                {
-                    <MudAlert Severity="Severity.Success">@botAnswerResponse</MudAlert>
-
-                <MudButton @ref="NextQuestionButton" Variant="Variant.Filled" Color="Color.Success" OnClick="GenerateQuestion" Class="mt-4" Disabled="SelectedUnit == null && !IsRandomUnit">
-                        @if (_processing)
-                        {
-                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                            <MudText Class="ms-2">Processing</MudText>
-                        }
-                        else
-                        {
-                            <MudText>Press Enter for Next Question</MudText>
-                        }
-
-                    </MudButton>
-                }
-                else
-                {
-                    if (isSomewhatCorrect)
+            </MudCardContent>
+            <MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GenerateResponseAnswer" Class="mt-4" >
+                    @if (_processing)
                     {
-                        <MudAlert Severity="Severity.Warning">@botAnswerResponse</MudAlert>
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                        <MudText Class="ms-2">Processing</MudText>
                     }
                     else
                     {
-                        <MudAlert Severity="Severity.Error">@botAnswerResponse</MudAlert>
+                        <MudText>Submit Answer</MudText>
                     }
-                
+
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+
+
+        
+        
+        <br><br />
+    
+        @if (hasAnswer)
+        {
+            if (isCorrect)
+            {
+                <MudAlert Severity="Severity.Success">@botAnswerResponse</MudAlert>
+
+            <MudButton @ref="NextQuestionButton" Variant="Variant.Filled" Color="Color.Success" OnClick="GenerateQuestion" Class="mt-4" Disabled="SelectedUnit == null && !IsRandomUnit">
+                    @if (_processing)
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                        <MudText Class="ms-2">Processing</MudText>
+                    }
+                    else
+                    {
+                        <MudText>Press Enter for Next Question</MudText>
+                    }
+
+                </MudButton>
+            }
+            else
+            {
+                if (isSomewhatCorrect)
+                {
+                    <MudAlert Severity="Severity.Warning">@botAnswerResponse</MudAlert>
                 }
+                else
+                {
+                    <MudAlert Severity="Severity.Error">@botAnswerResponse</MudAlert>
+                }
+            
             }
         }
+    }
+        
+    
+    <MudDataGrid @ref="dataGrid" Items="@SelectedUnitTopicTrackerModels" Filterable="true"
+                 Hideable="true" Groupable="true" GroupExpanded="false" GroupClassFunc="GroupClassFunc">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Knowledge Gap Breakdown</MudText>
+            <MudSpacer />
+        </ToolBarContent>
+        <Columns>
+            <PropertyColumn Property="x => x.Topic" Title="Nr" Filterable="false" Groupable="false" />
+            <PropertyColumn Property="x => x.AttemptResults.Count(i => i == true)" Title="Correct Answers" />
+            <PropertyColumn Property="x => x.AttemptResults.Count()" Title="Total Attempts" />
 
+            <PropertyColumn Property="x => x.Unit.Name" Title="Category" Grouping GroupBy="@_groupBy">
+                <GroupTemplate>
+                    <span style="font-weight:bold">Category: @context.Grouping.Key</span>
+                </GroupTemplate>
+            </PropertyColumn>
+        </Columns>
+     @*   <PagerContent>
+            <MudDataGridPager T="StudyTopicTrackerService.TopicTrackerModel" />
+        </PagerContent>*@
+    </MudDataGrid>
  
 </MudContainer>

@@ -29,8 +29,10 @@ namespace Enlighten.Study.Core.Services
 
                 foreach (var topicElement in topicElements)
                 {
-                    unit.Topics.Add(new TopicTrackerModel(topicElement));
+                    unit.Topics.Add(new TopicTrackerModel(unitElement, topicElement));
                 }
+
+                TrackerUnits.Add(unit);
             }
         }
 
@@ -48,11 +50,14 @@ namespace Enlighten.Study.Core.Services
 
         public record TopicTrackerModel
         {
-            public TopicTrackerModel(string topic)
+            public TopicTrackerModel(TextbookUnit unit, string topic)
             {
+                Unit = unit;
                 Topic = topic;
                 AttemptResults = new List<bool>();
             }
+
+            public TextbookUnit Unit { get; }
             public string Topic { get; set; }
             public List<bool> AttemptResults { get; set; }
         }
