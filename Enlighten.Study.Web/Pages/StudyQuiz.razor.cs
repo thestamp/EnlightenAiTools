@@ -21,7 +21,6 @@ namespace Enlighten.Study.Web.Pages
         public MudTextField<string> txtAnswer { get; set; }
 
         public MudButton NextQuestionButton { get; set; }
-        public MudDataGrid<StudyTopicTrackerService.TopicTrackerModel> dataGrid { get; set; }
         public List<StudyTopicTrackerService.TopicTrackerModel> SelectedUnitTopicTrackerModels { get; set; }
         public bool hasAnswer { get; set; }
         public bool isCorrect { get; set; }
@@ -54,20 +53,6 @@ namespace Enlighten.Study.Web.Pages
 
 
         }
-
-        public string GroupClassFunc(GroupDefinition<StudyTopicTrackerService.TopicTrackerModel> item)
-        {
-            return item.Grouping.Key?.ToString() == "Nonmetal" || item.Grouping.Key?.ToString() == "Other"
-                ? "mud-theme-warning"
-                : string.Empty;
-        }
-
-        public Func<StudyTopicTrackerService.TopicTrackerModel, object> _groupBy = x =>
-        {
-            //if (_customizeGroupBy)
-            //    return _nonmetals.Contains(x.Sign) ? "Nonmetal" : "Metal";
-            return x.Unit.Name;
-        };
 
         public async Task RefreshUnits()
         {

@@ -114,27 +114,58 @@
         }
     }
         
-    
-    <MudDataGrid @ref="dataGrid" Items="@SelectedUnitTopicTrackerModels" Filterable="true"
-                 Hideable="true" Groupable="true" GroupExpanded="false" GroupClassFunc="GroupClassFunc">
-        <ToolBarContent>
-            <MudText Typo="Typo.h6">Knowledge Gap Breakdown</MudText>
-            <MudSpacer />
-        </ToolBarContent>
-        <Columns>
-            <PropertyColumn Property="x => x.Topic" Title="Nr" Filterable="false" Groupable="false" />
-            <PropertyColumn Property="x => x.AttemptResults.Count(i => i == true)" Title="Correct Answers" />
-            <PropertyColumn Property="x => x.AttemptResults.Count()" Title="Total Attempts" />
+    @if (SelectedTextbook != null)
+    {
+        <br/><br/>
+        <MudText Typo="Typo.h4">Topic Coverage</MudText>
+        <MudExpansionPanels MultiExpansion="true">
 
-            <PropertyColumn Property="x => x.Unit.Name" Title="Category" Grouping GroupBy="@_groupBy">
-                <GroupTemplate>
-                    <span style="font-weight:bold">Category: @context.Grouping.Key</span>
-                </GroupTemplate>
-            </PropertyColumn>
-        </Columns>
-     @*   <PagerContent>
-            <MudDataGridPager T="StudyTopicTrackerService.TopicTrackerModel" />
-        </PagerContent>*@
-    </MudDataGrid>
+            @foreach (var i in SelectedTextbook.Units)
+            {
+                <MudExpansionPanel Text="@i.Name">
+                    @{
+                        var topics = TopicTrackerServiceList[SelectedTextbook].TrackerUnits.First(j => j.Unit == i).Topics.ToList();
+                        var countAttempted = @topics.Count(i => i.AttemptResults.Any());
+                        var countTotal = @topics.Count;
+                        var progressValue = ((double)countAttempted / countTotal) * 100;
+                    }
+                    @countAttempted out of @countTotal topics attempted
+                    <MudProgressLinear Color="Color.Tertiary" Size="Size.Large" Value="@progressValue" />
+
+                    <br><br>
+                    <MudGrid Spacing="1">
+                        @foreach (var topic in topics)
+                        {
+                            var hasAttempted = topic.AttemptResults.Any();
+                            var isPass = hasAttempted
+                                         && ((double)topic.AttemptResults.Count(k => k) / topic.AttemptResults.Count >= 0.5);
+                            <MudItem xs="12" sm="6">
+                                @if (!hasAttempted)
+                                {
+                                    <MudAlert Severity="Severity.Info" Dense="true"> @topic.Topic</MudAlert>
+                                }
+                                else if (isPass)
+                                {
+                                    <MudAlert Severity="Severity.Success" Dense="true"> @topic.Topic</MudAlert>
+                                }
+                                else
+                                {
+                                    <MudAlert Severity="Severity.Error" Dense="true"> @topic.Topic</MudAlert>
+                                }
+
+                            </MudItem>
+                        }
+                      
+
+                    </MudGrid>
+                
+                    
+                </MudExpansionPanel>
+      
+            }
+
+        </MudExpansionPanels>
+    }
+
  
 </MudContainer>
