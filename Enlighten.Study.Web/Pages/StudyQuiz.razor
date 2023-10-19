@@ -1,6 +1,7 @@
 ﻿@page "/quiz"
 
 @using Enlighten.Data.Models
+@using Enlighten.Study.Core.Services
 @inherits StudyQuizBase
 
 <MudText Typo="Typo.h3" GutterBottom="true">Quiz</MudText>
@@ -9,7 +10,7 @@
 <MudContainer>
     <MudPaper Elevation="2" Rounded="true" Class="p-4 my-4">
         
-        <MudSelect T="Textbook" Label="Select Textbook" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedTextbook" >
+        <MudSelect T="Textbook" Label="Select Textbook" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedTextbook" SelectedValuesChanged="RefreshUnits">
             @foreach (var item in Textbooks)
             {
                 <MudSelectItem Value="@item">@item.Name</MudSelectItem>
@@ -49,69 +50,122 @@
     <br /><br />
         
     @if (!string.IsNullOrEmpty(botQuestion))
-        {
+    {
 
-            <MudCard>
-                <MudCardContent>
-                    <MudMarkdown Value="@botQuestion"/>
+        <MudCard>
+            <MudCardContent>
+                <MudMarkdown Value="@botQuestion"/>
 
-                <MudTextField Immediate="true" @ref="txtAnswer" @bind-Value="@userAnswer" Label="Your Answer" Multiline="true" Rows="2" Variant="Variant.Outlined" Class="mt-4" Disabled="_processing"  OnKeyDown="OnKeyDown" />
+            <MudTextField Immediate="true" @ref="txtAnswer" @bind-Value="@userAnswer" Label="Your Answer" Multiline="true" Rows="2" Variant="Variant.Outlined" Class="mt-4" Disabled="_processing"  OnKeyDown="OnKeyDown" />
 
-                </MudCardContent>
-                <MudCardActions>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GenerateResponseAnswer" Class="mt-4" >
-                        @if (_processing)
-                        {
-                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                            <MudText Class="ms-2">Processing</MudText>
-                        }
-                        else
-                        {
-                            <MudText>Submit Answer</MudText>
-                        }
-
-                    </MudButton>
-                </MudCardActions>
-            </MudCard>
-
-
-            
-            
-            <br><br />
-        
-            @if (hasAnswer)
-            {
-                if (isCorrect)
-                {
-                    <MudAlert Severity="Severity.Success">@botAnswerResponse</MudAlert>
-
-                <MudButton @ref="NextQuestionButton" Variant="Variant.Filled" Color="Color.Success" OnClick="GenerateQuestion" Class="mt-4" Disabled="SelectedUnit == null && !IsRandomUnit">
-                        @if (_processing)
-                        {
-                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                            <MudText Class="ms-2">Processing</MudText>
-                        }
-                        else
-                        {
-                            <MudText>Press Enter for Next Question</MudText>
-                        }
-
-                    </MudButton>
-                }
-                else
-                {
-                    if (isSomewhatCorrect)
+            </MudCardContent>
+            <MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="GenerateResponseAnswer" Class="mt-4" >
+                    @if (_processing)
                     {
-                        <MudAlert Severity="Severity.Warning">@botAnswerResponse</MudAlert>
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                        <MudText Class="ms-2">Processing</MudText>
                     }
                     else
                     {
-                        <MudAlert Severity="Severity.Error">@botAnswerResponse</MudAlert>
+                        <MudText>Submit Answer</MudText>
                     }
-                
+
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+
+
+        
+        
+        <br><br />
+    
+        @if (hasAnswer)
+        {
+            if (isCorrect)
+            {
+                <MudAlert Severity="Severity.Success">@botAnswerResponse</MudAlert>
+
+            <MudButton @ref="NextQuestionButton" Variant="Variant.Filled" Color="Color.Success" OnClick="GenerateQuestion" Class="mt-4" Disabled="SelectedUnit == null && !IsRandomUnit">
+                    @if (_processing)
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                        <MudText Class="ms-2">Processing</MudText>
+                    }
+                    else
+                    {
+                        <MudText>Press Enter for Next Question</MudText>
+                    }
+
+                </MudButton>
+            }
+            else
+            {
+                if (isSomewhatCorrect)
+                {
+                    <MudAlert Severity="Severity.Warning">@botAnswerResponse</MudAlert>
                 }
+                else
+                {
+                    <MudAlert Severity="Severity.Error">@botAnswerResponse</MudAlert>
+                }
+            
             }
         }
+    }
+        
+    @if (SelectedTextbook != null)
+    {
+        <br/><br/>
+        <MudText Typo="Typo.h4">Topic Coverage</MudText>
+        <MudExpansionPanels MultiExpansion="true">
+
+            @foreach (var i in SelectedTextbook.Units)
+            {
+                <MudExpansionPanel Text="@i.Name" IsInitiallyExpanded="true">
+                    @{
+                        var topics = TopicTrackerServiceList[SelectedTextbook].TrackerUnits.First(j => j.Unit == i).Topics.ToList();
+                        var countAttempted = @topics.Count(i => i.AttemptResults.Any());
+                        var countTotal = @topics.Count;
+                        var progressValue = ((double)countAttempted / countTotal) * 100;
+                    }
+                    @countAttempted out of @countTotal topics attempted
+                    <MudProgressLinear Color="Color.Tertiary" Size="Size.Large" Value="@progressValue" />
+
+                    <br><br>
+                    <MudGrid Spacing="1">
+                        @foreach (var topic in topics)
+                        {
+                            var hasAttempted = topic.AttemptResults.Any();
+                            var isPass = hasAttempted
+                                         && ((double)topic.AttemptResults.Count(k => k) / topic.AttemptResults.Count >= 0.5);
+                            <MudItem xs="12" sm="6">
+                                @if (!hasAttempted)
+                                {
+                                    <MudAlert Severity="Severity.Info" Dense="true"> @topic.Topic</MudAlert>
+                                }
+                                else if (isPass)
+                                {
+                                    <MudAlert Severity="Severity.Success" Dense="true"> @topic.Topic</MudAlert>
+                                }
+                                else
+                                {
+                                    <MudAlert Severity="Severity.Error" Dense="true"> @topic.Topic</MudAlert>
+                                }
+
+                            </MudItem>
+                        }
+                      
+
+                    </MudGrid>
+                
+                    
+                </MudExpansionPanel>
+      
+            }
+
+        </MudExpansionPanels>
+    }
 
  
 </MudContainer>

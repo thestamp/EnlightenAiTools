@@ -21,6 +21,7 @@ namespace Enlighten.Study.Web.Pages
         public MudTextField<string> txtAnswer { get; set; }
 
         public MudButton NextQuestionButton { get; set; }
+        public List<StudyTopicTrackerService.TopicTrackerModel> SelectedUnitTopicTrackerModels { get; set; }
         public bool hasAnswer { get; set; }
         public bool isCorrect { get; set; }
         public bool isSomewhatCorrect { get; set; }
@@ -31,26 +32,33 @@ namespace Enlighten.Study.Web.Pages
         public TextbookUnit? SelectedUnit { get; set; }
         public List<Textbook> Textbooks { get; set; }
         public Textbook? SelectedTextbook { get; set; }
+        public string SelectedTopic { get; set; }
         public string botQuestion { get; set; }
         public string userAnswer { get; set; }
         public string botAnswerResponse { get; set; }
 
         public bool IsRandomUnit { get; set; }
+        
+        public Dictionary<Textbook, StudyTopicTrackerService> TopicTrackerServiceList { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             Textbooks = await TextbookService.GetTextbooks();
+
+            TopicTrackerServiceList = new Dictionary<Textbook, StudyTopicTrackerService>();
+            foreach (var textbook in Textbooks)
+            {
+                TopicTrackerServiceList.Add(textbook, new StudyTopicTrackerService(textbook));
+            }
+
+
         }
 
-        //public async Task RefreshUnits(ChangeEventArgs e)
-        //{
-        //    if (SelectedTextbook == null)
-        //    {
-        //        return;
-        //    }
-
-        //    Units = await TextbookService.GetTextbookUnits(SelectedTextbook);
-        //}
+        public async Task RefreshUnits()
+        {
+            
+        SelectedUnitTopicTrackerModels = TopicTrackerServiceList[SelectedTextbook].TrackerUnits.SelectMany(j => j.Topics, (model, trackerModel) => trackerModel).ToList();
+        }
 
         //public async Task Enter(KeyboardEventArgs e)
         //{
@@ -59,7 +67,6 @@ namespace Enlighten.Study.Web.Pages
         //         await GenerateResponseAnswer();
         //    }
         //}
-
         public async Task GenerateQuestion()
         {
 
@@ -81,6 +88,7 @@ namespace Enlighten.Study.Web.Pages
             }
 
             var promptSettings = GptPromptService.RenderGptPrompt(SelectedTextbook, SelectedUnit);
+            SelectedTopic = promptSettings.SelectedTopic;
 
             var response = await svc.GenerateQuestion(
                 promptSettings,
@@ -150,8 +158,9 @@ namespace Enlighten.Study.Web.Pages
                 await txtAnswer.SelectAsync();
                 //
             }
-            
-           
+
+            TopicTrackerServiceList[SelectedTextbook].AddAttemptResult(SelectedUnit, SelectedTopic, isCorrect);
+
         }
 
 
