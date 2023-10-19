@@ -31,22 +31,23 @@ namespace Enlighten.Study.Web.Pages
         public TextbookUnit? SelectedUnit { get; set; }
         public List<Textbook> Textbooks { get; set; }
         public Textbook? SelectedTextbook { get; set; }
+        public string SelectedTopic { get; set; }
         public string botQuestion { get; set; }
         public string userAnswer { get; set; }
         public string botAnswerResponse { get; set; }
 
         public bool IsRandomUnit { get; set; }
-
-        public List<StudyTopicTrackerService> TopicTrackerServiceList { get; set; }
+        
+        public Dictionary<Textbook, StudyTopicTrackerService> TopicTrackerServiceList { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             Textbooks = await TextbookService.GetTextbooks();
 
-            TopicTrackerServiceList = new List<StudyTopicTrackerService>();
+            TopicTrackerServiceList = new Dictionary<Textbook, StudyTopicTrackerService>();
             foreach (var textbook in Textbooks)
             {
-                TopicTrackerServiceList.Add(new StudyTopicTrackerService(textbook));
+                TopicTrackerServiceList.Add(textbook, new StudyTopicTrackerService(textbook));
             }
         }
 
@@ -88,6 +89,7 @@ namespace Enlighten.Study.Web.Pages
             }
 
             var promptSettings = GptPromptService.RenderGptPrompt(SelectedTextbook, SelectedUnit);
+            SelectedTopic = promptSettings.SelectedTopic;
 
             var response = await svc.GenerateQuestion(
                 promptSettings,
@@ -157,8 +159,9 @@ namespace Enlighten.Study.Web.Pages
                 await txtAnswer.SelectAsync();
                 //
             }
-            
-           
+
+            TopicTrackerServiceList[SelectedTextbook].AddAttemptResult(SelectedUnit, SelectedTopic, isCorrect);
+
         }
 
 
