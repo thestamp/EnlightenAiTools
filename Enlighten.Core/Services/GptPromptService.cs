@@ -23,7 +23,6 @@ namespace Enlighten.Core.Services
         }
         public class GptPromptRenderModel : BaseGpt
         {
-            public string SelectedTopic { get; set; }
         }
 
         public GptPromptRenderModel RenderGptPrompt(params BaseGpt[] gptPromptModels)
@@ -73,26 +72,6 @@ namespace Enlighten.Core.Services
                 }
             }
 
-            foreach (var gptPromptModel in gptPromptModels)
-            {
-                if (gptPromptModel is TextbookUnit)
-                {
-                    var unit = (TextbookUnit)gptPromptModel;
-
-                    if (unit.TopicList.Contains(','))
-                    {
-                        var topicList = unit.TopicList.Split(',');
-                        var rnd = new Random();
-
-                        var randomTopicIndex = rnd.NextInt64(0, topicList.Length);
-                        var selectedTopic = topicList[randomTopicIndex];
-                        result.QuizQuestionPrompt = result.QuizQuestionPrompt?.Replace("{topic}", selectedTopic);
-                        result.SelectedTopic = selectedTopic;
-                    }
-
-                }
-            }
-            
             return result;
         }
     }

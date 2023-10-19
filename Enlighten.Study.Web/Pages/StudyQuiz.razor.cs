@@ -5,6 +5,7 @@ using Enlighten.Gpt.Client.Configuration;
 using Enlighten.Study.Core.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.IdentityModel.Tokens;
 using MudBlazor;
 
 namespace Enlighten.Study.Web.Pages
@@ -67,17 +68,39 @@ namespace Enlighten.Study.Web.Pages
         //         await GenerateResponseAnswer();
         //    }
         //}
-        public async Task GenerateQuestion()
+        public async Task GenerateQuestion(TextbookUnit unit = null, string topic = null)
         {
-
             //reset some things
             botQuestion = "";
             userAnswer = "";
             botAnswerResponse = "";
             hasAnswer = false;
-
-
+            var isRandomTopic = false;
             _processing = true;
+
+            //are we forcing a specific unit or topic?
+            if (unit != null)
+            {
+                SelectedUnit = unit;
+                IsRandomUnit = false;
+            }
+
+            if (!string.IsNullOrEmpty(topic))
+            {
+                if (unit == null)
+                {
+                    throw new ArgumentException("Unit is required to select a topic");
+                }
+
+                //there no dropdown for topic (right now), so we will set it here
+                SelectedTopic = topic;
+                isRandomTopic = false;
+            }
+            else
+            {
+                isRandomTopic = true;
+            }
+            
             var svc = new StudyQuizService(GptClientSettingsModel);
 
             //if random unit is selected, we will select a random unit
@@ -87,8 +110,19 @@ namespace Enlighten.Study.Web.Pages
                 SelectedUnit = SelectedTextbook.Units[randomIndex];
             }
 
+            //select random topic
+            if (isRandomTopic)
+            {
+                var topicList = SelectedUnit.TopicList.Split(',');
+                var rnd = new Random();
+                var randomTopicIndex = rnd.NextInt64(0, topicList.Length);
+                SelectedTopic = topicList[randomTopicIndex];
+            }
+
             var promptSettings = GptPromptService.RenderGptPrompt(SelectedTextbook, SelectedUnit);
-            SelectedTopic = promptSettings.SelectedTopic;
+
+            //apply selected topic to prompt (TODO: find proper place for this logic)
+            promptSettings.QuizQuestionPrompt = promptSettings.QuizQuestionPrompt?.Replace("{topic}", SelectedTopic);
 
             var response = await svc.GenerateQuestion(
                 promptSettings,
@@ -160,7 +194,6 @@ namespace Enlighten.Study.Web.Pages
             }
 
             TopicTrackerServiceList[SelectedTextbook].AddAttemptResult(SelectedUnit, SelectedTopic, isCorrect);
-
         }
 
 
