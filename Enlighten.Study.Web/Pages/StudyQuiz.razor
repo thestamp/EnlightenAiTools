@@ -122,7 +122,7 @@
 
             @foreach (var i in SelectedTextbook.Units)
             {
-                <MudExpansionPanel Text="@i.Name">
+                <MudExpansionPanel Text="@i.Name" IsInitiallyExpanded="true">
                     @{
                         var topics = TopicTrackerServiceList[SelectedTextbook].TrackerUnits.First(j => j.Unit == i).Topics.ToList();
                         var countAttempted = @topics.Count(i => i.AttemptResults.Any());
