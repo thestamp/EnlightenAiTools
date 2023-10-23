@@ -12,12 +12,14 @@ namespace Enlighten.Study.Web.Pages
 {
     public class StudyQuizBase : ComponentBase
     {
-
+        [Parameter] public string? ShareId { get; set; }
         [Inject] public GptClientSettingsModel GptClientSettingsModel { get; set; }
 
         [Inject] public TextbookService TextbookService { get; set; }
 
         [Inject] public GptPromptService GptPromptService { get; set; }
+
+        [Inject] NavigationManager NavigationManager { get; set; }
 
         public MudTextField<string> txtAnswer { get; set; }
 
@@ -44,7 +46,31 @@ namespace Enlighten.Study.Web.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            Textbooks = await TextbookService.GetTextbooks();
+            if (ShareId != null)
+            {
+                var sharedTextbook = await TextbookService.GetTextbookFromShareId(ShareId);
+
+                if (sharedTextbook == null)
+                {
+                    NavigationManager.NavigateTo("/");
+                }
+                else
+                {
+                    Textbooks = new List<Textbook>()
+                    {
+                        sharedTextbook
+                    };
+
+                    SelectedTextbook = sharedTextbook;
+                }
+
+            }
+            else
+            {
+                Textbooks = await TextbookService.GetTextbooks(true);
+            }
+
+            
 
             TopicTrackerServiceList = new Dictionary<Textbook, StudyTopicTrackerService>();
             foreach (var textbook in Textbooks)
@@ -58,7 +84,7 @@ namespace Enlighten.Study.Web.Pages
         public async Task RefreshUnits()
         {
             
-        SelectedUnitTopicTrackerModels = TopicTrackerServiceList[SelectedTextbook].TrackerUnits.SelectMany(j => j.Topics, (model, trackerModel) => trackerModel).ToList();
+            SelectedUnitTopicTrackerModels = TopicTrackerServiceList[SelectedTextbook].TrackerUnits.SelectMany(j => j.Topics, (model, trackerModel) => trackerModel).ToList();
         }
 
         //public async Task Enter(KeyboardEventArgs e)

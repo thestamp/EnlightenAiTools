@@ -29,7 +29,7 @@ namespace Enlighten.Study.Web.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            Textbooks = await TextbookService.GetTextbooks();
+            Textbooks = await TextbookService.GetTextbooks(true);
         }
 
         //public async Task RefreshUnits(ChangeEventArgs e)
