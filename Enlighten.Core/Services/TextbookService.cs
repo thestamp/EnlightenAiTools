@@ -13,14 +13,22 @@ namespace Enlighten.Core.Services
             _dataContext = dataContext;
         }
 
-        public async Task<List<Textbook>> GetTextbooks()
+        public async Task<List<Textbook>> GetTextbooks(bool publishedOnly)
         {
-            return await Task.FromResult(_dataContext.Textbooks.Include(j => j.Units).ToList());
+            return await Task.FromResult(_dataContext.Textbooks.Include(j => j.Units)
+                .Where(i => (!publishedOnly || i.IsPublished) && i.PrivateShareId == null).ToList());
         }
 
         public async Task<Textbook> GetTextbook(int id)
         {
             return await Task.FromResult(_dataContext.Textbooks.Include(j => j.Units).First(x => x.Id == id));
+        }
+
+        public async Task<Textbook?> GetTextbookFromShareId(string shareId)
+        {
+            return await _dataContext.Textbooks
+                .Include(j => j.Units)
+                .FirstOrDefaultAsync(i => i.IsPublished && i.PrivateShareId == shareId);
         }
 
         public async Task<List<TextbookUnit>> GetTextbookUnits(Textbook textbook)

@@ -20,6 +20,12 @@ namespace Enlighten.Admin.Core.Services
             _context = context;
         }
 
+        public async Task<List<Textbook>> GetTextbooks()
+        {
+   
+            return await Task.FromResult(_context.Textbooks.Include(j => j.Units).ToList());
+        }
+
         public Textbook CreateTextbook()
         {
             return new Textbook()
