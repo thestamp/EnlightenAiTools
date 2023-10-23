@@ -4,6 +4,16 @@
 
 <MudText Typo="Typo.h4">Edit Textbook</MudText>
 
+
+
+<MudCheckBox @bind-Checked="Textbook.IsPublished">Published</MudCheckBox>
+<MudCheckBox @bind-Checked="Textbook.IsPrivateShared">Privately Shared</MudCheckBox>
+
+@if (Textbook.IsPrivateShared)
+{
+    <MudTextField @bind-Value="ShareUrl" Label="Url" ReadOnly="true"></MudTextField>
+}
+
 <MudTextField @bind-Value="Textbook.Name" Label="Textbook Name" Variant="Variant.Text" />
 <MudTextField @bind-Value="Textbook.Summary" Label="Textbook Gpt Summary" HelperText="Introduce GPT to this textbook" Variant="Variant.Text" />
 

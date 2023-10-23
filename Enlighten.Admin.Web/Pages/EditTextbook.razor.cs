@@ -16,7 +16,7 @@ namespace Enlighten.Admin.Web.Pages
         [Inject] NavigationManager NavigationManager { get; set; }
         public Textbook Textbook { get; set; }
 
-
+        public string ShareUrl { get; set; }
         protected override async Task OnInitializedAsync()
         {
             if (Id != null)
@@ -27,7 +27,16 @@ namespace Enlighten.Admin.Web.Pages
             {
                 Textbook = TextbookService.CreateTextbook();
             }
-            
+
+            RefreshShareUrl();
+
+        }
+
+        public void RefreshShareUrl()
+        {
+            ShareUrl = $"{Textbook.PrivateShareId}";
+
+
         }
 
         public async Task Save()
