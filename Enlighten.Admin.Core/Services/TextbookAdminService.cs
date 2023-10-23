@@ -30,7 +30,8 @@ namespace Enlighten.Admin.Core.Services
         {
             return new Textbook()
             {
-                Units = new List<TextbookUnit>()
+                Units = new List<TextbookUnit>(),
+                PrivateShareId = Guid.NewGuid().ToString("N")
             };
         }
 

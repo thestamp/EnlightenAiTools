@@ -59,11 +59,17 @@ namespace Enlighten.Study.Web.Pages
                     {
                         sharedTextbook
                     };
+
+                    SelectedTextbook = sharedTextbook;
                 }
 
             }
+            else
+            {
+                Textbooks = await TextbookService.GetTextbooks(true);
+            }
 
-            Textbooks = await TextbookService.GetTextbooks(true);
+            
 
             TopicTrackerServiceList = new Dictionary<Textbook, StudyTopicTrackerService>();
             foreach (var textbook in Textbooks)

@@ -16,7 +16,7 @@ namespace Enlighten.Core.Services
         public async Task<List<Textbook>> GetTextbooks(bool publishedOnly)
         {
             return await Task.FromResult(_dataContext.Textbooks.Include(j => j.Units)
-                .Where(i => (!publishedOnly || i.IsPublished) && i.PrivateShareId == null).ToList());
+                .Where(i => (!publishedOnly || i.IsPublished) && !i.IsPrivateShared).ToList());
         }
 
         public async Task<Textbook> GetTextbook(int id)

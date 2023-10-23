@@ -1,5 +1,5 @@
 ﻿@page "/quiz"
-
+@page "/quiz/{ShareId}"
 @using Enlighten.Data.Models
 @using Enlighten.Study.Core.Services
 @inherits StudyQuizBase
@@ -9,25 +9,26 @@
 
 <MudContainer>
     <MudPaper Elevation="2" Rounded="true" Class="p-4 my-4">
-        
-        <MudSelect T="Textbook" Label="Select Textbook" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedTextbook" SelectedValuesChanged="RefreshUnits">
-            @foreach (var item in Textbooks)
-            {
-                <MudSelectItem Value="@item">@item.Name</MudSelectItem>
-            }
-        </MudSelect>
-        
-
-        <MudSelect T="TextbookUnit" Label="Select Unit" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedUnit" Disabled="IsRandomUnit">
-            @if (SelectedTextbook != null)
-            {
-                @foreach (var item in SelectedTextbook.Units)
+        @if (Textbooks != null)
+        {
+            <MudSelect T="Textbook" Label="Select Textbook" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedTextbook" SelectedValuesChanged="RefreshUnits">
+                @foreach (var item in Textbooks)
                 {
                     <MudSelectItem Value="@item">@item.Name</MudSelectItem>
                 }
-            }
+            </MudSelect>
+
+            <MudSelect T="TextbookUnit" Label="Select Unit" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="@SelectedUnit" Disabled="IsRandomUnit">
+                @if (SelectedTextbook != null)
+                {
+                    @foreach (var item in SelectedTextbook.Units)
+                    {
+                        <MudSelectItem Value="@item">@item.Name</MudSelectItem>
+                    }
+                }
            
-        </MudSelect>
+            </MudSelect>
+        }
 
         <MudCheckBox T="bool" Label="Random Unit" @bind-Checked="@IsRandomUnit"></MudCheckBox>
 
