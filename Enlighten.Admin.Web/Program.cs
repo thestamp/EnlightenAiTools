@@ -6,10 +6,13 @@ using Enlighten.Core.Services;
 using Enlighten.Data.Configuration;
 using Enlighten.Data.Infrastructure;
 using Enlighten.Gpt.Client.Configuration;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 using MudBlazor.Services;
 using ConfigurationExtensions = Common.Web.ConfigurationExtensions;
 
@@ -33,6 +36,13 @@ var configuration = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
     .Build();
 
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApp(configuration.GetSection("EntraID"));
+builder.Services.AddControllersWithViews()
+    .AddMicrosoftIdentityUI();
+
+builder.Services.AddServerSideBlazor()
+    .AddMicrosoftIdentityConsentHandler();
 
 
 var gptClientSettings = configuration.BindAndAddSingleton<GptClientSettingsModel>(builder.Services, "GptClientSettings");
@@ -53,6 +63,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
+    app.UseAuthentication();
+    app.UseAuthorization();
+
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
