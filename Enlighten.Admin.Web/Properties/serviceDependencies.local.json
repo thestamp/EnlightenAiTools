@@ -8,6 +8,10 @@
       "containerImage": "mcr.microsoft.com/mssql/server:2019-latest",
       "type": "mssql.container",
       "connectionId": "DataSettings:DataContext"
+    },
+    "identityapp1": {
+      "type": "identityapp.default",
+      "dynamicId": null
     }
   }
 }

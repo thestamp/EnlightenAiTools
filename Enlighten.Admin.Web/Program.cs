@@ -15,6 +15,9 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using MudBlazor.Services;
 using ConfigurationExtensions = Common.Web.ConfigurationExtensions;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +25,8 @@ StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configurat
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
+builder.Services.AddServerSideBlazor()
+    .AddMicrosoftIdentityConsentHandler();
 
 
 
@@ -37,9 +41,14 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(configuration.GetSection("EntraID"));
+    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 builder.Services.AddControllersWithViews()
     .AddMicrosoftIdentityUI();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = options.DefaultPolicy;
+});
 
 builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
@@ -59,17 +68,19 @@ builder.Services.AddTransient<GptPromptService>();//all the constructors are inj
 builder.Services.AddMudServices();
 
 var app = builder.Build();
-
+app.UseAuthentication();
+app.UseAuthorization();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseAuthentication();
-    app.UseAuthorization();
+   
 
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.MapControllers();
 
 app.UseHttpsRedirection();
 

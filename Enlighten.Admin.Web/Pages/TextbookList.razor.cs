@@ -1,10 +1,12 @@
 ﻿using Enlighten.Admin.Core.Services;
 using Enlighten.Core.Services;
 using Enlighten.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
 namespace Enlighten.Admin.Web.Pages
 {
+    [Authorize]
     public class TextbookListBase : ComponentBase
     {
         public List<Textbook> Textbooks { get; set; }

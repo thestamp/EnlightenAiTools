@@ -3,6 +3,10 @@
     "mssql1": {
       "type": "mssql",
       "connectionId": "DataSettings:DataContext"
+    },
+    "identityapp1": {
+      "type": "identityapp",
+      "dynamicId": null
     }
   }
 }
