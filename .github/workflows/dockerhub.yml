@@ -1,4 +1,8 @@
 name: Build and publish a Docker image
+on:
+  push:
+    branches:
+      - '*'
 jobs:
   build:
     name: Build & push docker image
