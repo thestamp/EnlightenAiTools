@@ -1,4 +1,4 @@
-name: Build and publish Admin Docker image
+name: Deploy Admin App 
 on:
   push:
     branches:

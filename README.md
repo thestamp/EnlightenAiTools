@@ -1,5 +1,8 @@
 # Enlighten AI Tools
 
+[![Azure Static Web Apps CI/CD](https://github.com/thestamp/EnlightenAiTools/actions/workflows/enlightentools-admin-docker.yml/badge.svg)](https://hub.docker.com/repository/docker/thestamp/enlighten-ai-tools-admin)
+[![Azure Static Web Apps CI/CD](https://github.com/thestamp/EnlightenAiTools/actions/workflows/enlightentools-study-docker.yml/badge.svg)](https://hub.docker.com/repository/docker/thestamp/enlighten-ai-tools-study)
+
 Welcome to Enlighten AI Tools, an open-source project dedicated to enhancing the way we study and interact with educational content. 
 
 The goal of this project is to provide a safe and innovative tool using AI (ChatGPT) that generates random questions from texts, guides learners to delve deeper into subjects, and tracks areas for improvement.

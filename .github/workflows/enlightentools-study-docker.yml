@@ -1,4 +1,4 @@
-name: Build and publish Study Docker image
+name: Docker Build - Study
 on:
   push:
     branches:
