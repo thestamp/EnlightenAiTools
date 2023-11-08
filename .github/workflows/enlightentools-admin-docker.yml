@@ -38,7 +38,8 @@ jobs:
         with:
           context: ./  # Set the context to the root of the repository
           file: ./Enlighten.Admin.Web/Dockerfile  # Path to the Dockerfile from the root
-          push: ${{ github.event.base_ref =='refs/heads/main' && github.ref_type == 'tag' && !startsWith(github.ref, 'refs/tags/v0.')}}
-          tags: ${{ steps.metadata.outputs.tags }}
+          #push: ${{ github.event.base_ref =='refs/heads/main' && github.ref_type == 'tag' && !startsWith(github.ref, 'refs/tags/v0.')}}
+          push: true
+          tags:  ${{ env.IMG_NAME }}:dragons
           labels: ${{ steps.metadata.outputs.labels }}
 
