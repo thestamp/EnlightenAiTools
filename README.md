@@ -31,7 +31,7 @@ TBD - List of necessary prerequisites and dependencies.
 To set up Enlighten AI Tools locally, follow these steps:
 
 ```
-git clone https://github.com/yourusername/enlighten-ai-tools.git
+git clone https://github.com/thestamp/EnlightenAiTools
 cd enlighten-ai-tools
 # Follow up with installation steps
 ```
