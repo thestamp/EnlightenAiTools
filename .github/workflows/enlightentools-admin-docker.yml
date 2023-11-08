@@ -1,4 +1,4 @@
-name: Deploy Admin App 
+name: Docker Build - Admin
 on:
   push:
     branches:
