@@ -15,27 +15,22 @@ namespace Enlighten.Study.Core.Services
             _clientSettings = clientSettings;
         }
 
-        public async Task<IAsyncEnumerable<string>> GenerateQuestion(GptPromptService.GptPromptRenderModel gptPromptSettings, string textbookContent)
+
+
+        public async Task<IAsyncEnumerable<string>> GenerateQuestion(ConversationSettingsModel conversationSettings)
         {
             var client = new GptClientService(_clientSettings);
 
             client.Connect();
-            
-
-            var conversationSettings = InitializeConversation(gptPromptSettings, textbookContent);
 
             // The bot is requested to generate a short-answer question based on the textbook content
-            var response = await client.StreamResponse(conversationSettings, gptPromptSettings.QuizQuestionPrompt);
+            var response = await client.StreamResponse(conversationSettings);
             return response;
         }
 
-        public async Task<IAsyncEnumerable<string>> GenerateQuestionResponseAnswer(GptPromptService.GptPromptRenderModel gptPromptSettings, string textbookContent, string botQuestion, string userAnswer)
+        public ConversationSettingsModel GenerateConversation(GptPromptService.GptPromptRenderModel gptPromptSettings, string textbookContent, string botQuestion, string userAnswer = null)
         {
-            var client = new GptClientService(_clientSettings);
-
-            client.Connect();
-
-            var conversationSettings = InitializeConversation(gptPromptSettings, textbookContent);
+            var conversationSettings = InitializeConversation(gptPromptSettings, textbookContent, userAnswer);
 
             // catching the bot up on the question asked before
             conversationSettings.ExampleDialogs.Add(new ConversationSettingsModel.ExampleDialog()
@@ -44,20 +39,30 @@ namespace Enlighten.Study.Core.Services
                 BotResponse = botQuestion
             });
 
+            return conversationSettings;
+        }
+
+        public async Task<IAsyncEnumerable<string>> GenerateQuestionResponseAnswer(ConversationSettingsModel conversationSettings)
+        {
+            var client = new GptClientService(_clientSettings);
+
+            client.Connect();
+
             // The bot is requested to generate a short-answer question based on the textbook content
-            var response = await client.StreamResponse(conversationSettings, gptPromptSettings.QuizAnswerPrompt.Replace("{userAnswer}", userAnswer));
+            var response = await client.StreamResponse(conversationSettings);
             return response;
         }
 
 
-        public ConversationSettingsModel InitializeConversation(GptPromptService.GptPromptRenderModel gptPromptSettings, string textbookContent)
+        public ConversationSettingsModel InitializeConversation(GptPromptService.GptPromptRenderModel gptPromptSettings, string textbookContent, string userAnswer)
         {
             var conversationSettings = new ConversationSettingsModel()
             {
-                SystemMessage = gptPromptSettings.QuizSystemMessage
+                SystemMessage = gptPromptSettings.QuizSystemMessage,
+                UserMessage = userAnswer
             };
 
-            // The user provides content from a geometry textbook
+            // The reference content
             var words = textbookContent.Split(new[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
             for (int i = 0; i < words.Length; i += 500)

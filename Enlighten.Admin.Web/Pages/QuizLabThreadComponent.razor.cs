@@ -42,10 +42,16 @@ namespace Enlighten.Admin.Web.Pages
             botQuestion = "";
             //generate question
             var promptSettings = GptPromptService.RenderGptPrompt(SelectedUnit.Textbook, SelectedUnit);
-            var response = await svc.GenerateQuestion(
+
+
+            var conversationSettings = svc.InitializeConversation(
                 promptSettings,
                 "TEXTBOOK SUMMARY: " + SelectedUnit.Textbook.Summary
-                                     + "UNIT CONTENT: " + SelectedUnit.Content);
+                                     + "UNIT CONTENT: " + SelectedUnit.Content,
+                                    promptSettings.QuizQuestionPrompt);
+
+
+            var response = await svc.GenerateQuestion(conversationSettings);
 
             await foreach (var res in response)
             {
@@ -70,11 +76,14 @@ namespace Enlighten.Admin.Web.Pages
             var promptSettings = GptPromptService.RenderGptPrompt(SelectedUnit.Textbook, SelectedUnit);
 
             var svc = new StudyQuizService(GptClientSettingsModel);
-            var response = await svc.GenerateQuestionResponseAnswer(
-                promptSettings,
+            var conversationSettings = svc.GenerateConversation(promptSettings,
                 "TEXTBOOK SUMMARY: " + SelectedUnit.Textbook.Summary
                                      + "UNIT CONTENT: " + SelectedUnit.Content
-                , botQuestion, userAnswer);
+                , botQuestion, promptSettings.QuizAnswerPrompt.Replace("{userAnswer}", userAnswer));
+
+            var response = await svc.GenerateQuestionResponseAnswer(conversationSettings);
+
+
             var responseContent = "";
             await foreach (var res in response)
             {

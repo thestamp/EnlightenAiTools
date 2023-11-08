@@ -46,6 +46,12 @@ namespace Enlighten.Gpt.Client.Services
 
         public async Task<IAsyncEnumerable<string>> StreamResponse(ConversationSettingsModel settings, string userInput)
         {
+            settings.UserMessage = userInput;
+            return await StreamResponse(settings);
+        }
+
+        public async Task<IAsyncEnumerable<string>> StreamResponse(ConversationSettingsModel settings)
+        {
             var chat = client.Chat.CreateConversation();
             chat.Model = Model.ChatGPTTurbo;
 
@@ -60,7 +66,7 @@ namespace Enlighten.Gpt.Client.Services
             }
 
             // now let's ask it a question
-            chat.AppendUserInput(userInput);
+            chat.AppendUserInput(settings.UserMessage);
             // and get the response
 
             return chat.StreamResponseEnumerableFromChatbotAsync();

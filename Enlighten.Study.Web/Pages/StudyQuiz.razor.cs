@@ -149,11 +149,12 @@ namespace Enlighten.Study.Web.Pages
 
             //apply selected topic to prompt (TODO: find proper place for this logic)
             promptSettings.QuizQuestionPrompt = promptSettings.QuizQuestionPrompt?.Replace("{topic}", SelectedTopic);
+            var conversation = svc.InitializeConversation(promptSettings,
+                "TEXTBOOK SUMMARY: " + SelectedTextbook.Summary
+                                     + "UNIT CONTENT: " + SelectedUnit.Content,
+                promptSettings.QuizQuestionPrompt);
+            var response = await svc.GenerateQuestion(conversation);
 
-            var response = await svc.GenerateQuestion(
-                promptSettings,
-                "TEXTBOOK SUMMARY: " + SelectedTextbook.Summary 
-                +"UNIT CONTENT: " + SelectedUnit.Content);
 
             await foreach (var res in response)
             {
@@ -178,11 +179,12 @@ namespace Enlighten.Study.Web.Pages
             var promptSettings = GptPromptService.RenderGptPrompt(SelectedTextbook, SelectedUnit);
 
             var svc = new StudyQuizService(GptClientSettingsModel);
-            var response = await svc.GenerateQuestionResponseAnswer(
-                promptSettings,
+            var conversationSettings = svc.GenerateConversation(promptSettings,
                 "TEXTBOOK SUMMARY: " + SelectedTextbook.Summary
-                + "UNIT CONTENT: " + SelectedUnit.Content
-                , botQuestion, userAnswer);
+                                     + "UNIT CONTENT: " + SelectedUnit.Content
+                , botQuestion, promptSettings.QuizAnswerPrompt.Replace("{userAnswer}", userAnswer));
+
+            var response = await svc.GenerateQuestionResponseAnswer(conversationSettings);
 
             var responseContent = "";
             await foreach (var res in response)
